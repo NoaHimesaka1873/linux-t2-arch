@@ -1,7 +1,7 @@
-From c3fbeed75d947c53136862f0b988484a6447aadc Mon Sep 17 00:00:00 2001
+From 7bacc972f0d048054f2b975461a29fd8a4790d94 Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Tue, 21 Dec 2021 17:39:28 +0900
-Subject: [PATCH 27/30] brcmfmac: pcie: Replace brcmf_pcie_copy_mem_todev with
+Subject: [PATCH 28/31] brcmfmac: pcie: Replace brcmf_pcie_copy_mem_todev with
  memcpy_toio
 
 The alignment check was wrong (e.g. & 4 instead of & 3), and the logic
@@ -19,7 +19,7 @@ Signed-off-by: Hector Martin <marcan@marcan.st>
  1 file changed, 6 insertions(+), 47 deletions(-)
 
 diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-index 7abb8ad37..f065330ab 100644
+index 6aba7266b..e38becad1 100644
 --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
 +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
 @@ -14,6 +14,7 @@
@@ -115,5 +115,5 @@ index 7abb8ad37..f065330ab 100644
  	} else {
  		brcmf_dbg(PCIE, "No matching NVRAM file found %s\n",
 -- 
-2.34.1
+2.25.1
 

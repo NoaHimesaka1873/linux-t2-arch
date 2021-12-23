@@ -1,7 +1,7 @@
-From 8053bc5e217751ab177c8607c0be8a210230bf7f Mon Sep 17 00:00:00 2001
+From a92f19b4133bf604ac1b53d43942ee9d8e86ed34 Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Tue, 21 Dec 2021 17:46:40 +0900
-Subject: [PATCH 13/30] brcmfmac: pcie: Add IDs/properties for BCM4378
+Subject: [PATCH 14/31] brcmfmac: pcie: Add IDs/properties for BCM4378
 
 This chip is present on Apple M1 (t8103) platforms:
 
@@ -32,7 +32,7 @@ index 1ee49f9e3..56a6f4168 100644
  		brcmf_err("unknown chip: %s\n", ci->pub.name);
  		break;
 diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-index cfe6788e8..4658236ac 100644
+index 30fabafb2..4d3ee7c21 100644
 --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
 +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
 @@ -58,6 +58,7 @@ BRCMF_FW_DEF(4365C, "brcmfmac4365c-pcie");
@@ -51,7 +51,7 @@ index cfe6788e8..4658236ac 100644
  };
  
  #define BRCMF_PCIE_FW_UP_TIMEOUT		5000 /* msec */
-@@ -2006,6 +2008,11 @@ static int brcmf_pcie_read_otp(struct brcmf_pciedev_info *devinfo)
+@@ -2008,6 +2010,11 @@ static int brcmf_pcie_read_otp(struct brcmf_pciedev_info *devinfo)
  	int ret;
  
  	switch (devinfo->ci->chip) {
@@ -63,7 +63,7 @@ index cfe6788e8..4658236ac 100644
  	default:
  		/* OTP not supported on this chip */
  		return 0;
-@@ -2503,6 +2510,7 @@ static const struct pci_device_id brcmf_pcie_devid_table[] = {
+@@ -2505,6 +2512,7 @@ static const struct pci_device_id brcmf_pcie_devid_table[] = {
  	BRCMF_PCIE_DEVICE(BRCM_PCIE_4366_2G_DEVICE_ID),
  	BRCMF_PCIE_DEVICE(BRCM_PCIE_4366_5G_DEVICE_ID),
  	BRCMF_PCIE_DEVICE(BRCM_PCIE_4371_DEVICE_ID),
@@ -92,5 +92,5 @@ index 9d8132016..8f552b53f 100644
  
  /* brcmsmac IDs */
 -- 
-2.34.1
+2.25.1
 

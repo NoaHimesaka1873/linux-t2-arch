@@ -1,7 +1,7 @@
-From ba5853773d23b8c7feaca8aecbbdd5befe0220a5 Mon Sep 17 00:00:00 2001
+From 1ef46254f864ed654eb02ec090728d2c7a3a108c Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Thu, 23 Dec 2021 19:51:36 +0900
-Subject: [PATCH 15/30] brcmfmac: acpi: Add support for fetching Apple ACPI
+Subject: [PATCH 16/31] brcmfmac: acpi: Add support for fetching Apple ACPI
  properties
 
 On DT platforms, the module-instance and antenna-sku-info properties
@@ -91,10 +91,10 @@ index 000000000..b70cd6970
 +	}
 +}
 diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/common.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/common.c
-index 5adf27b13..bbc28f472 100644
+index ec4cb7050..0151d129c 100644
 --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/common.c
 +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/common.c
-@@ -448,6 +448,7 @@ struct brcmf_mp_device *brcmf_get_module_param(struct device *dev,
+@@ -437,6 +437,7 @@ struct brcmf_mp_device *brcmf_get_module_param(struct device *dev,
  		/* No platform data for this device, try OF and DMI data */
  		brcmf_dmi_probe(settings, chip, chiprev);
  		brcmf_of_probe(dev, bus_type, settings);
@@ -123,5 +123,5 @@ index d4aa25d64..a88c4a931 100644
  
  u8 brcmf_map_prio_to_aci(void *cfg, u8 prio);
 -- 
-2.34.1
+2.25.1
 

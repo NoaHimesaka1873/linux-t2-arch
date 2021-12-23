@@ -1,7 +1,7 @@
-From 11f748cbea74b2a90939b6cbb412103cfb708c13 Mon Sep 17 00:00:00 2001
+From 9a823f24476e37cf0fe519813f96fab139917d72 Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Mon, 20 Dec 2021 18:16:33 +0900
-Subject: [PATCH 24/30] brcmfmac: cfg80211: Add support for PMKID_V3 operations
+Subject: [PATCH 25/31] brcmfmac: cfg80211: Add support for PMKID_V3 operations
 
 Add support for the new PMKID_V3 API, which allows performing PMKID
 mutations individually, instead of requiring the driver to keep track of
@@ -219,5 +219,5 @@ index 7be1f4ca5..bc936c181 100644
   * struct brcmf_pno_param_le - PNO scan configuration parameters
   *
 -- 
-2.34.1
+2.25.1
 

@@ -1,7 +1,7 @@
-From 2e9021d00d53d7675700beb1523608bf867c7be9 Mon Sep 17 00:00:00 2001
+From b2d207e75c80a71a6cb35e8a8f4a314c71702a33 Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Thu, 23 Dec 2021 19:30:17 +0900
-Subject: [PATCH 16/30] brcmfmac: pcie: Provide a buffer of random bytes to the
+Subject: [PATCH 17/31] brcmfmac: pcie: Provide a buffer of random bytes to the
  device
 
 Newer Apple firmwares on chipsets without a hardware RNG require the
@@ -18,7 +18,7 @@ Signed-off-by: Hector Martin <marcan@marcan.st>
  1 file changed, 31 insertions(+)
 
 diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-index 4658236ac..edec4e29b 100644
+index 4d3ee7c21..ed346d5aa 100644
 --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
 +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
 @@ -12,6 +12,7 @@
@@ -79,5 +79,5 @@ index 4658236ac..edec4e29b 100644
  		brcmf_dbg(PCIE, "No matching NVRAM file found %s\n",
  			  devinfo->nvram_name);
 -- 
-2.34.1
+2.25.1
 

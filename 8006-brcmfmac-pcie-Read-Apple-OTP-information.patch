@@ -1,7 +1,7 @@
-From 5e6e79d69fdfc126fa01086de80466fd8b30e4fc Mon Sep 17 00:00:00 2001
+From bf1fc24122699b32ce2e8dcec354cbef62ee2dc0 Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Tue, 21 Dec 2021 17:26:34 +0900
-Subject: [PATCH 06/30] brcmfmac: pcie: Read Apple OTP information
+Subject: [PATCH 07/31] brcmfmac: pcie: Read Apple OTP information
 
 On Apple platforms, the One Time Programmable ROM in the Broadcom chips
 contains information about the specific board design (module, vendor,
@@ -13,12 +13,12 @@ any chips yet.
 
 Signed-off-by: Hector Martin <marcan@marcan.st>
 ---
- .../broadcom/brcm80211/brcmfmac/pcie.c        | 209 ++++++++++++++++++
+ .../broadcom/brcm80211/brcmfmac/pcie.c        | 211 ++++++++++++++++++
  include/linux/bcma/bcma_driver_chipcommon.h   |   1 +
- 2 files changed, 210 insertions(+)
+ 2 files changed, 212 insertions(+)
 
 diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-index cdfb32d6f..b6899ef39 100644
+index cdfb32d6f..9f24431c2 100644
 --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
 +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
 @@ -255,6 +255,15 @@ struct brcmf_pcie_core_info {
@@ -70,7 +70,7 @@ index cdfb32d6f..b6899ef39 100644
  #define WRITECC32(devinfo, reg, value) brcmf_pcie_write_reg32(devinfo, \
  		CHIPCREGOFFS(reg), value)
  
-@@ -1751,6 +1772,188 @@ static const struct brcmf_buscore_ops brcmf_pcie_buscore_ops = {
+@@ -1751,6 +1772,190 @@ static const struct brcmf_buscore_ops brcmf_pcie_buscore_ops = {
  	.write32 = brcmf_pcie_buscore_write32,
  };
  
@@ -207,6 +207,8 @@ index cdfb32d6f..b6899ef39 100644
 +
 +static int brcmf_pcie_read_otp(struct brcmf_pciedev_info *devinfo)
 +{
++	const struct pci_dev *pdev = devinfo->pdev;
++	struct brcmf_bus *bus = dev_get_drvdata(&pdev->dev);
 +	u32 coreid, base, words, idx, sromctl;
 +	u16 *otp;
 +	struct brcmf_core *core;
@@ -220,7 +222,7 @@ index cdfb32d6f..b6899ef39 100644
 +
 +	core = brcmf_chip_get_core(devinfo->ci, coreid);
 +	if (!core) {
-+		brcmf_err(NULL, "No OTP core\n");
++		brcmf_err(bus, "No OTP core\n");
 +		return -ENODEV;
 +	}
 +
@@ -228,8 +230,8 @@ index cdfb32d6f..b6899ef39 100644
 +	sromctl = READCC32(devinfo, sromcontrol);
 +
 +	if (!(sromctl & BCMA_CC_SROM_CONTROL_OTP_PRESENT)) {
-+		/* Chip lacks OTP */
-+		brcmf_info(NULL, "No OTP\n");
++		/* Chip lacks OTP, try without it... */
++		brcmf_err(bus, "OTP unavailable, using default firmware\n");
 +		return 0;
 +	}
 +
@@ -259,13 +261,13 @@ index cdfb32d6f..b6899ef39 100644
  #define BRCMF_PCIE_FW_CODE	0
  #define BRCMF_PCIE_FW_NVRAM	1
  #define BRCMF_PCIE_FW_CLM	2
-@@ -1951,6 +2154,12 @@ brcmf_pcie_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+@@ -1951,6 +2156,12 @@ brcmf_pcie_probe(struct pci_dev *pdev, const struct pci_device_id *id)
  	if (ret)
  		goto fail_bus;
  
 +	ret = brcmf_pcie_read_otp(devinfo);
 +	if (ret) {
-+		brcmf_err(NULL, "failed to parse OTP\n");
++		brcmf_err(bus, "failed to parse OTP\n");
 +		goto fail_brcmf;
 +	}
 +
@@ -285,5 +287,5 @@ index d35b92060..c91db7460 100644
  #define  BCMA_CC_SROM_CONTROL_SIZE_MASK	0x00000006
  #define  BCMA_CC_SROM_CONTROL_SIZE_1K	0x00000000
 -- 
-2.34.1
+2.25.1
 

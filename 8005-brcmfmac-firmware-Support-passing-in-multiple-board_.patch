@@ -1,7 +1,7 @@
 From 325fafcfee0396f7d1e3c49667573808b8ca58b7 Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Tue, 21 Dec 2021 17:38:37 +0900
-Subject: [PATCH 05/30] brcmfmac: firmware: Support passing in multiple
+Subject: [PATCH 06/31] brcmfmac: firmware: Support passing in multiple
  board_types
 
 In order to make use of the multiple alt_path functionality, change
@@ -139,5 +139,5 @@ index 593ddd237..637aef30c 100644
  	return fwreq;
  }
 -- 
-2.34.1
+2.25.1
 

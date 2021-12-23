@@ -1,7 +1,7 @@
-From f1e89358ae19b5190ee4d3ac343bfb3248ee6604 Mon Sep 17 00:00:00 2001
+From d795c6f4901bad972c62399ff621a7509f6e9eb6 Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Tue, 21 Dec 2021 17:39:04 +0900
-Subject: [PATCH 10/30] brcmfmac: msgbuf: Increase RX ring sizes to 1024
+Subject: [PATCH 11/31] brcmfmac: msgbuf: Increase RX ring sizes to 1024
 
 Newer chips used on Apple platforms have more than max_rxbufpost greater
 than 512, which causes warnings when brcmf_msgbuf_rxbuf_data_fill tries
@@ -30,5 +30,5 @@ index 2e322edbb..6a849f4a9 100644
  
  #define BRCMF_H2D_MSGRING_CONTROL_SUBMIT_ITEMSIZE	40
 -- 
-2.34.1
+2.25.1
 

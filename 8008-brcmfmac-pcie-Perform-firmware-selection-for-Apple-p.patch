@@ -1,7 +1,7 @@
-From d757daff9392a115585368c0306ae83bce6df892 Mon Sep 17 00:00:00 2001
+From a3a409d6dc8908abbce2f9b6a2375cebde57d019 Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Tue, 21 Dec 2021 17:45:21 +0900
-Subject: [PATCH 08/30] brcmfmac: pcie: Perform firmware selection for Apple
+Subject: [PATCH 09/31] brcmfmac: pcie: Perform firmware selection for Apple
  platforms
 
 On Apple platforms, firmware selection uses the following elements:
@@ -77,10 +77,10 @@ Signed-off-by: Hector Martin <marcan@marcan.st>
  1 file changed, 63 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-index b6899ef39..d0dbc06ac 100644
+index 9f24431c2..3ba8abe65 100644
 --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
 +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-@@ -2077,11 +2077,69 @@ brcmf_pcie_prepare_fw_request(struct brcmf_pciedev_info *devinfo)
+@@ -2079,11 +2079,69 @@ brcmf_pcie_prepare_fw_request(struct brcmf_pciedev_info *devinfo)
  	fwreq->domain_nr = pci_domain_nr(devinfo->pdev->bus) + 1;
  	fwreq->bus_nr = devinfo->pdev->bus->number;
  
@@ -156,5 +156,5 @@ index b6899ef39..d0dbc06ac 100644
  	return fwreq;
  }
 -- 
-2.34.1
+2.25.1
 

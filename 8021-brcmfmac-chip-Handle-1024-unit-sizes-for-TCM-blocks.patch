@@ -1,7 +1,7 @@
-From 996dbebd17b9ce899e5143776bd9235268d12719 Mon Sep 17 00:00:00 2001
+From df9ed56dc0a34830bf452d70e88db94b48f2d5bc Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Tue, 21 Dec 2021 17:14:59 +0900
-Subject: [PATCH 21/30] brcmfmac: chip: Handle 1024-unit sizes for TCM blocks
+Subject: [PATCH 22/31] brcmfmac: chip: Handle 1024-unit sizes for TCM blocks
 
 BCM4387 has trailing odd-sized blocks as part of TCM which have
 their size described as a multiple of 1024 instead of 8192. Handle this
@@ -69,5 +69,5 @@ index 15a1211f0..c4c80664b 100644
  		if (ci->pub.rambase == INVALID_RAMBASE) {
  			brcmf_err("RAM base not provided with ARM CR4 core\n");
 -- 
-2.34.1
+2.25.1
 
