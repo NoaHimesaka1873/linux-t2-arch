@@ -5,7 +5,7 @@
 pkgbase=mbp-16.1-linux-wifi
 pkgver=5.15.7
 _srcname=linux-${pkgver}
-pkgrel=1
+pkgrel=2
 pkgdesc='Linux for MBP 16.1 Wifi'
 _srctag=v${pkgver%.*}-${pkgver##*.}
 url="https://git.archlinux.org/linux.git/log/?h=v$_srctag"
@@ -56,10 +56,36 @@ source=(
   7001-drm-i915-fbdev-Discard-BIOS-framebuffers-exceeding-h.patch
 
   # Broadcom WIFI/BT device support
-  8001-corellium-wifi-bigsur.patch
-  8002-Add-support-for-BCM4377.patch
-  8003-Add-support-for-BCM4355.patch
-  8004-workaround-disable-D3-for-BCM4377b.patch
+  8001-brcmfmac-pcie-Declare-missing-firmware-files-in-pcie.patch
+  8002-brcmfmac-firmware-Support-having-multiple-alt-paths.patch
+  8003-brcmfmac-firmware-Handle-per-board-clm_blob-files.patch
+  8004-brcmfmac-pcie-sdio-usb-Get-CLM-blob-via-standard-fir.patch
+  8005-brcmfmac-firmware-Support-passing-in-multiple-board_.patch
+  8006-brcmfmac-pcie-Read-Apple-OTP-information.patch
+  8007-brcmfmac-of-Fetch-Apple-properties.patch
+  8008-brcmfmac-pcie-Perform-firmware-selection-for-Apple-p.patch
+  8009-brcmfmac-common-Set-MAC-address-from-platform-inform.patch
+  8010-brcmfmac-msgbuf-Increase-RX-ring-sizes-to-1024.patch
+  8011-brcmfmac-pcie-Fix-crashes-due-to-early-IRQs.patch
+  8012-brcmfmac-pcie-Support-PCIe-core-revisions-64.patch
+  8013-brcmfmac-pcie-Add-IDs-properties-for-BCM4378.patch
+  8014-ACPI-property-Support-strings-in-Apple-_DSM-props.patch
+  8015-brcmfmac-acpi-Add-support-for-fetching-Apple-ACPI-pr.patch
+  8016-brcmfmac-pcie-Provide-a-buffer-of-random-bytes-to-th.patch
+  8017-brcmfmac-pcie-Add-IDs-properties-for-BCM4355.patch
+  8018-brcmfmac-pcie-Add-IDs-properties-for-BCM4377.patch
+  8019-brcmfmac-pcie-Perform-correct-BCM4364-firmware-selec.patch
+  8020-brcmfmac-chip-Only-disable-D11-cores-handle-an-arbit.patch
+  8021-brcmfmac-chip-Handle-1024-unit-sizes-for-TCM-blocks.patch
+  8022-brcmfmac-cfg80211-Add-support-for-scan-params-v2.patch
+  8023-brcmfmac-feature-Add-support-for-setting-feats-based.patch
+  8024-brcmfmac-cfg80211-Add-support-for-PMKID_V3-operation.patch
+  8025-brcmfmac-cfg80211-Pass-the-PMK-in-binary-instead-of-.patch
+  8026-brcmfmac-pcie-Add-IDs-properties-for-BCM4387.patch
+  8027-brcmfmac-pcie-Replace-brcmf_pcie_copy_mem_todev-with.patch
+  8028-brcmfmac-pcie-Read-the-console-on-init-and-shutdown.patch
+  8029-brcmfmac-pcie-Release-firmwares-in-the-brcmf_pcie_se.patch
+
   
   9001-bluetooth-add-disable-read-tx-power-quirk.patch
   9002-add-bluetooth-support-for-16,2.patch
@@ -263,10 +289,35 @@ sha256sums=('5d9050a839edc7480c5c8f7a284cd28bee6db07bec9e41c684f399192bbe5db1'
             '9dfa9f02d17c5cd9620fa2c1d43ca967b81b6a56d33c2bafae14e0c64e498baa'
             '9640178d6251686c980c30fc528b3d70beac6ce8246bf433506a3f843808326c'
             '90a6012cdd8a64ede8e0bbaf7331960bd68f628e0973b65459188eb1ccb5b829'
-            '66e91a3c4616a6c1dfaade969c78f8b3799006d208ac5b5ef314589ba684afce'
-            '8f5f6321d90a2c4e753d993e5ec5c8ad78ddb4415f5306117b40f40dd9e42af2'
-            'e9e564bdd8f45c552c0f1b32ffa142c887f449f9aadcd190f8d7d143c7567259'
-            'f7ae3714acad6190bd8ec49ec02640bcd03e1e089426187ba293298cfa158068'
+            '23a44991bcd6254ff91ab259900bb7decad16efc5b87498c93fcd9bb86fe561a'
+            'ec5d81967b7dcbe19c49660a2496d325f4460d8bac84bf230f04c6a285a702ed'
+            'b55c3860a65b071fb7f80da5e4832f7fc5a3e9a4dbe812f88ba8fb1f4005845d'
+            'b15e0e9312d75916a594a9cab1a713f4b365af679cdfd580c725aca378444605'
+            'edfd91b574748e34d28f2252b3105eef19032cb0e7cf2875957070c82c132d10'
+            'd882e2be3e8bb709c78e36ad0899f8a6284ae44c1f8498ef47fbe12bfa1fbb39'
+            'b8b464fabf1ffdc502e2665fd84b48577080be4326c39f6f805b64e50a62b3af'
+            'efdf0d0f803892390a70d9545abd90d9ab508b98f5f0fc311831a8a4d02c0119'
+            'ae245a95f809add13a1994be2504cd0ccaad135d9bc23f8c3be1ce9f7a3dc42e'
+            'faf6d67326ca84f5e4c48c70a47fae187410dfd7b5ffbf132104a1aeffbc5909'
+            'c9634fbdb4e24ce49a83bc0adb6d4c9c94b595c12a192168641336637b7833e6'
+            '46e69eb646f6c7b8d12b8b5349548fa974180fac132458f3469fc95d0fd78174'
+            '9fa373a3fde819189cbadb79151675a4a7156d0b25f1a0b93a87c2f0e62bc293'
+            '5db21c4fdfea64ddfea6d4c60fead96b4c3b38d0e61a9444f1786972866f5aaa'
+            '4b1e775e0a0964fe2dd0b546b5e8d419607b0b44a35cfd91093308d53a89a1d2'
+            '7aefeec1e2d2ef613370b4d0e78a05ad1bdcfae771940e2211f742807ff248f2'
+            'b93e02b6d89500384dcbfe5d46c295e18bd89626345cef35c2be90c69c821f22'
+            'f05f06ea251f7178f6d0e59e20b34161e92de402f2ab99015610c467f33c439e'
+            '259c85e851b1b5805e906e7087b35af3af1f4a9174b7d68c89a56fe6f4b80b0d'
+            '52ef35749aa6277cadde83180fd578a4367e19a6b258843c042c9432ddc671bc'
+            '485bce0cb80db01a0d54721d1467ba7f364a6d34d71724c7425c74b084db81b7'
+            '0feb043a67032e10ded7e34f4d718783deba95b5a41e1236abf054691d1fefe5'
+            'ff89215a47e93f0b72071365a8ccb3579f18927f21bef7cb26615199963161ff'
+            '78928fc794afd3e79bf47bfe36d8b045d0837bafeab75df32cbc3c0353f3fedd'
+            '395e66232aca126c98a08402156e657685753c0ee1b1cd42b8fae920824317ad'
+            'b172ddc0ee1afd2227c2be76d0a7a489e8e8a687d413f1f53bef006eee1ead6c'
+            '94144d074f02e0300f93ba29e2a654da05f2105e6f4482822baa064d7c69323e'
+            'd1960e90c70f976868a0816b271da8899226cdde972ce4e174e34c49208d717b'
+            'afab93d61a17b4d4e442bc05c73ff352fd891ec84bc4ff655289e1ebd23b714c'
             '31e414978a947bdb71f27ed364c4da73b81fcf1921250cb69ee1bcf2bbd25636'
             '5d36770f436b69e69633d060deb55a37b8b3871983068e95fb33d5a195f00574'
             '22b2695afcc4103743e55ceeda4691a59ddce84a8f16d1d572159dd2ff7f8537')
