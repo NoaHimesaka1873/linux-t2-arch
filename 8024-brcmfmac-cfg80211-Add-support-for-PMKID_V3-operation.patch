@@ -1,4 +1,4 @@
-From f8a20e8d495533239fa8c46f6a51063e9ed65eca Mon Sep 17 00:00:00 2001
+From c2848618077ddc37b3e2e2ff2c22b8cc423822a6 Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Mon, 20 Dec 2021 18:16:33 +0900
 Subject: [PATCH 24/29] brcmfmac: cfg80211: Add support for PMKID_V3 operations

@@ -1,4 +1,4 @@
-From bb30d189e34dae21efa99fc720361839ea259ae3 Mon Sep 17 00:00:00 2001
+From 5e341c53e88383a998f3618e999762f660a26c02 Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Tue, 21 Dec 2021 17:26:34 +0900
 Subject: [PATCH 06/29] brcmfmac: pcie: Read Apple OTP information
@@ -13,12 +13,12 @@ any chips yet.
 
 Signed-off-by: Hector Martin <marcan@marcan.st>
 ---
- .../broadcom/brcm80211/brcmfmac/pcie.c        | 211 ++++++++++++++++++
+ .../broadcom/brcm80211/brcmfmac/pcie.c        | 221 ++++++++++++++++++
  include/linux/bcma/bcma_driver_chipcommon.h   |   1 +
- 2 files changed, 212 insertions(+)
+ 2 files changed, 222 insertions(+)
 
 diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-index cdfb32d6f..9f24431c2 100644
+index cdfb32d6f..3cc79d912 100644
 --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
 +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
 @@ -255,6 +255,15 @@ struct brcmf_pcie_core_info {
@@ -70,7 +70,7 @@ index cdfb32d6f..9f24431c2 100644
  #define WRITECC32(devinfo, reg, value) brcmf_pcie_write_reg32(devinfo, \
  		CHIPCREGOFFS(reg), value)
  
-@@ -1751,6 +1772,190 @@ static const struct brcmf_buscore_ops brcmf_pcie_buscore_ops = {
+@@ -1751,6 +1772,200 @@ static const struct brcmf_buscore_ops brcmf_pcie_buscore_ops = {
  	.write32 = brcmf_pcie_buscore_write32,
  };
  
@@ -226,17 +226,25 @@ index cdfb32d6f..9f24431c2 100644
 +		return -ENODEV;
 +	}
 +
-+	brcmf_pcie_select_core(devinfo, BCMA_CORE_CHIPCOMMON);
-+	sromctl = READCC32(devinfo, sromcontrol);
++	if (coreid == BCMA_CORE_CHIPCOMMON) {
++		/*
++		 * Chips with OTP accessed via ChipCommon need additional
++		 * handling to access the OTP
++		 */
++		brcmf_pcie_select_core(devinfo, coreid);
++		sromctl = READCC32(devinfo, sromcontrol);
 +
-+	if (!(sromctl & BCMA_CC_SROM_CONTROL_OTP_PRESENT)) {
-+		/* Chip lacks OTP, try without it... */
-+		brcmf_err(bus, "OTP unavailable, using default firmware\n");
-+		return 0;
++		if (!(sromctl & BCMA_CC_SROM_CONTROL_OTP_PRESENT)) {
++			/* Chip lacks OTP, try without it... */
++			brcmf_err(bus,
++				  "OTP unavailable, using default firmware\n");
++			return 0;
++		}
++
++		/* Map OTP to shadow area */
++		WRITECC32(devinfo, sromcontrol,
++			  sromctl | BCMA_CC_SROM_CONTROL_OTPSEL);
 +	}
-+
-+	/* Map OTP to shadow area */
-+	WRITECC32(devinfo, sromcontrol, sromctl | BCMA_CC_SROM_CONTROL_OTPSEL);
 +
 +	otp = kzalloc(sizeof(u16) * words, GFP_KERNEL);
 +
@@ -249,8 +257,10 @@ index cdfb32d6f..9f24431c2 100644
 +		brcmf_dbg(PCIE, "[%8x] 0x%04x\n", base + 2 * idx, otp[idx]);
 +	}
 +
-+	brcmf_pcie_select_core(devinfo, BCMA_CORE_CHIPCOMMON);
-+	WRITECC32(devinfo, sromcontrol, sromctl);
++	if (coreid == BCMA_CORE_CHIPCOMMON) {
++		brcmf_pcie_select_core(devinfo, coreid);
++		WRITECC32(devinfo, sromcontrol, sromctl);
++	}
 +
 +	ret = brcmf_pcie_parse_otp(devinfo, (u8 *)otp, 2 * words);
 +	kfree(otp);
@@ -261,7 +271,7 @@ index cdfb32d6f..9f24431c2 100644
  #define BRCMF_PCIE_FW_CODE	0
  #define BRCMF_PCIE_FW_NVRAM	1
  #define BRCMF_PCIE_FW_CLM	2
-@@ -1951,6 +2156,12 @@ brcmf_pcie_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+@@ -1951,6 +2166,12 @@ brcmf_pcie_probe(struct pci_dev *pdev, const struct pci_device_id *id)
  	if (ret)
  		goto fail_bus;
  

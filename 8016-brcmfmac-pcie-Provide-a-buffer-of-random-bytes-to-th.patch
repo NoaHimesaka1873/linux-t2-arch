@@ -1,4 +1,4 @@
-From fe487a53188430c60f386f6182ed3df4794e8a02 Mon Sep 17 00:00:00 2001
+From 7d0f1f3475206fe2a37ee9e3180783d1c72daaaa Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Thu, 23 Dec 2021 19:30:17 +0900
 Subject: [PATCH 16/29] brcmfmac: pcie: Provide a buffer of random bytes to the
@@ -18,7 +18,7 @@ Signed-off-by: Hector Martin <marcan@marcan.st>
  1 file changed, 31 insertions(+)
 
 diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-index 4d3ee7c21..ed346d5aa 100644
+index 785090570..bd55f5a30 100644
 --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
 +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
 @@ -12,6 +12,7 @@

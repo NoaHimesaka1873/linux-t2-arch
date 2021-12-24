@@ -1,4 +1,4 @@
-From 75ad9fb8bcf639f2bc3546799501f16211d0f76f Mon Sep 17 00:00:00 2001
+From 09b15f594d459c1bc6b63d00c1b208021460e88e Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Tue, 21 Dec 2021 17:39:28 +0900
 Subject: [PATCH 27/29] brcmfmac: pcie: Replace brcmf_pcie_copy_mem_todev with
@@ -19,7 +19,7 @@ Signed-off-by: Hector Martin <marcan@marcan.st>
  1 file changed, 6 insertions(+), 47 deletions(-)
 
 diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-index 6aba7266b..e38becad1 100644
+index 8778d9950..1e3d5e3c3 100644
 --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
 +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
 @@ -14,6 +14,7 @@

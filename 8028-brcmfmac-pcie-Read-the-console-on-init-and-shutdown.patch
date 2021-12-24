@@ -1,4 +1,4 @@
-From 41f605fb25acab670d6ed079e5186acffd55cf08 Mon Sep 17 00:00:00 2001
+From 1bfd02a475230d36d3d5663838784a11950f5231 Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Tue, 21 Dec 2021 17:43:03 +0900
 Subject: [PATCH 28/29] brcmfmac: pcie: Read the console on init and shutdown
@@ -12,7 +12,7 @@ Signed-off-by: Hector Martin <marcan@marcan.st>
  1 file changed, 4 insertions(+)
 
 diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-index e38becad1..d3e402504 100644
+index 1e3d5e3c3..30802d922 100644
 --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
 +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
 @@ -854,6 +854,8 @@ static void brcmf_pcie_bus_console_read(struct brcmf_pciedev_info *devinfo,
@@ -32,7 +32,7 @@ index e38becad1..d3e402504 100644
  
  	return 0;
  }
-@@ -2384,6 +2387,7 @@ brcmf_pcie_remove(struct pci_dev *pdev)
+@@ -2394,6 +2397,7 @@ brcmf_pcie_remove(struct pci_dev *pdev)
  		return;
  
  	devinfo = bus->bus_priv.pcie->devinfo;

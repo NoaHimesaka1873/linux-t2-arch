@@ -1,4 +1,4 @@
-From 88dd97849b88ced90ced472bb6b3ee47fe900fcb Mon Sep 17 00:00:00 2001
+From da1558f263300fcf9798e5c918aec9a90e65619b Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Tue, 21 Dec 2021 17:44:51 +0900
 Subject: [PATCH 29/29] brcmfmac: pcie: Release firmwares in the
@@ -14,10 +14,10 @@ Signed-off-by: Hector Martin <marcan@marcan.st>
  1 file changed, 2 insertions(+)
 
 diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-index d3e402504..e07c6eda9 100644
+index 30802d922..293443a1c 100644
 --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
 +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-@@ -2108,6 +2108,8 @@ static void brcmf_pcie_setup(struct device *dev, int ret,
+@@ -2118,6 +2118,8 @@ static void brcmf_pcie_setup(struct device *dev, int ret,
  	ret = brcmf_chip_get_raminfo(devinfo->ci);
  	if (ret) {
  		brcmf_err(bus, "Failed to get RAM info\n");

@@ -1,4 +1,4 @@
-From f715522f5fc21db28a4b37c5f60e46c213bdc4a3 Mon Sep 17 00:00:00 2001
+From 5aa741e9fbe7650a4018be84e6a3b60905625107 Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Thu, 23 Dec 2021 19:51:36 +0900
 Subject: [PATCH 15/29] brcmfmac: acpi: Add support for fetching Apple ACPI

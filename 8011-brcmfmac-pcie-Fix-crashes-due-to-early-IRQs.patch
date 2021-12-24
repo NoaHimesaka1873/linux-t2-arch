@@ -1,4 +1,4 @@
-From 410721dd72ac48c1614f79315210dd2d8e6c121b Mon Sep 17 00:00:00 2001
+From caea8fe9c9524950fedd3b317a05556dca105403 Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Tue, 21 Dec 2021 17:44:00 +0900
 Subject: [PATCH 11/29] brcmfmac: pcie: Fix crashes due to early IRQs
@@ -15,7 +15,7 @@ Signed-off-by: Hector Martin <marcan@marcan.st>
  1 file changed, 15 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-index 3ba8abe65..e9f5dbc7f 100644
+index 42b3c17ba..a4b49d175 100644
 --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
 +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
 @@ -1380,6 +1380,20 @@ static void brcmf_pcie_down(struct device *dev)
@@ -47,7 +47,7 @@ index 3ba8abe65..e9f5dbc7f 100644
  	.txdata = brcmf_pcie_tx,
  	.stop = brcmf_pcie_down,
  	.txctl = brcmf_pcie_tx_ctlpkt,
-@@ -2038,9 +2053,6 @@ static void brcmf_pcie_setup(struct device *dev, int ret,
+@@ -2048,9 +2063,6 @@ static void brcmf_pcie_setup(struct device *dev, int ret,
  
  	init_waitqueue_head(&devinfo->mbdata_resp_wait);
  

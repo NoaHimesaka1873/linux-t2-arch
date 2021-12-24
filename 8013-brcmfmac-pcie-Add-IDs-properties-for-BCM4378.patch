@@ -1,4 +1,4 @@
-From c9ce6209905b052f56be85af0066e22a8dc95ba0 Mon Sep 17 00:00:00 2001
+From 395b965fa51c7ad26284c6fefd7d05c3339bb24d Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Tue, 21 Dec 2021 17:46:40 +0900
 Subject: [PATCH 13/29] brcmfmac: pcie: Add IDs/properties for BCM4378
@@ -32,7 +32,7 @@ index 1ee49f9e3..56a6f4168 100644
  		brcmf_err("unknown chip: %s\n", ci->pub.name);
  		break;
 diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-index 30fabafb2..4d3ee7c21 100644
+index 4a6370efb..785090570 100644
 --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
 +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
 @@ -58,6 +58,7 @@ BRCMF_FW_DEF(4365C, "brcmfmac4365c-pcie");
@@ -63,7 +63,7 @@ index 30fabafb2..4d3ee7c21 100644
  	default:
  		/* OTP not supported on this chip */
  		return 0;
-@@ -2505,6 +2512,7 @@ static const struct pci_device_id brcmf_pcie_devid_table[] = {
+@@ -2515,6 +2522,7 @@ static const struct pci_device_id brcmf_pcie_devid_table[] = {
  	BRCMF_PCIE_DEVICE(BRCM_PCIE_4366_2G_DEVICE_ID),
  	BRCMF_PCIE_DEVICE(BRCM_PCIE_4366_5G_DEVICE_ID),
  	BRCMF_PCIE_DEVICE(BRCM_PCIE_4371_DEVICE_ID),

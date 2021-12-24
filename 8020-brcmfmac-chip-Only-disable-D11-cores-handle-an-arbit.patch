@@ -1,4 +1,4 @@
-From d443a06aa467a481548a19777a073ccd13796f1b Mon Sep 17 00:00:00 2001
+From d1da7977d230e10a35a6f0744c37ffccc1c83631 Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Mon, 20 Dec 2021 20:00:57 +0900
 Subject: [PATCH 20/29] brcmfmac: chip: Only disable D11 cores; handle an

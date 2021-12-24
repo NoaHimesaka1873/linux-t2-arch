@@ -1,4 +1,4 @@
-From c4dec4b6b9efa068d81c347b6c18d22ec40cefef Mon Sep 17 00:00:00 2001
+From 5a9d560acd1ed5a2b1d16c124aba6ff3f2205483 Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Tue, 21 Dec 2021 17:27:19 +0900
 Subject: [PATCH 07/29] brcmfmac: of: Fetch Apple properties

@@ -1,4 +1,4 @@
-From 63222c746bdd4e17d38d9b70478d7ba2904d178a Mon Sep 17 00:00:00 2001
+From d7efc0ae360df39dea3a843fb7bd57127652f728 Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Thu, 23 Dec 2021 19:51:11 +0900
 Subject: [PATCH 14/29] ACPI / property: Support strings in Apple _DSM props

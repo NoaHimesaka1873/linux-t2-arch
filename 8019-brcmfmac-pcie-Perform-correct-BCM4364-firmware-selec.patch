@@ -1,4 +1,4 @@
-From 4a3f809670e142a8dc5348780d715353d0a552d3 Mon Sep 17 00:00:00 2001
+From 7f5b8ed753c3616f7e20ac7ed95aea7276483298 Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Tue, 21 Dec 2021 17:51:52 +0900
 Subject: [PATCH 19/29] brcmfmac: pcie: Perform correct BCM4364 firmware
@@ -38,7 +38,7 @@ Signed-off-by: Hector Martin <marcan@marcan.st>
  1 file changed, 9 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-index 1afc0d201..a6c799c31 100644
+index ca3c2a29d..5bf67f1e6 100644
 --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
 +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
 @@ -54,7 +54,8 @@ BRCMF_FW_CLM_DEF(4356, "brcmfmac4356-pcie");

@@ -1,4 +1,4 @@
-From b5124a8d37b7457ba4de0c58813d83d27d41f023 Mon Sep 17 00:00:00 2001
+From 5ec28f818b9d53931d376c7b2fae8b81b4fa4a20 Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Mon, 20 Dec 2021 03:39:44 +0900
 Subject: [PATCH 22/29] brcmfmac: cfg80211: Add support for scan params v2

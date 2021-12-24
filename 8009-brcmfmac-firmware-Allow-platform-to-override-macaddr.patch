@@ -1,4 +1,4 @@
-From 75593f3222f9229a60d82846ed3ebd9a960f8129 Mon Sep 17 00:00:00 2001
+From 3b481da6295a389716c2d8fcfb4b5b87a0ef4103 Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Thu, 23 Dec 2021 22:32:08 +0900
 Subject: [PATCH 09/29] brcmfmac: firmware: Allow platform to override macaddr

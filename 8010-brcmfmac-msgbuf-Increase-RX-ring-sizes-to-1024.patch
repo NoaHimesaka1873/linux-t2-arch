@@ -1,4 +1,4 @@
-From 6891c131a5ab2830db02bd54ff4a8bd3459c423c Mon Sep 17 00:00:00 2001
+From 037883f3157a508078ffcaf336475645fa373f6a Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Tue, 21 Dec 2021 17:39:04 +0900
 Subject: [PATCH 10/29] brcmfmac: msgbuf: Increase RX ring sizes to 1024

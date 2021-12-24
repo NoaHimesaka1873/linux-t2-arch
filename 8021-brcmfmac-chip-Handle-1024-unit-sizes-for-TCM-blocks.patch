@@ -1,4 +1,4 @@
-From a25264cc253733d496d5d25b13b461d6a3d3dccf Mon Sep 17 00:00:00 2001
+From e80782889c8e9e319bbecc2da5d61514352d58d0 Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Tue, 21 Dec 2021 17:14:59 +0900
 Subject: [PATCH 21/29] brcmfmac: chip: Handle 1024-unit sizes for TCM blocks
