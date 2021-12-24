@@ -1,7 +1,7 @@
-From a3a409d6dc8908abbce2f9b6a2375cebde57d019 Mon Sep 17 00:00:00 2001
+From d7be7a733dce7d2594f9fae416e7165eefc85871 Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Tue, 21 Dec 2021 17:45:21 +0900
-Subject: [PATCH 09/31] brcmfmac: pcie: Perform firmware selection for Apple
+Subject: [PATCH 08/29] brcmfmac: pcie: Perform firmware selection for Apple
  platforms
 
 On Apple platforms, firmware selection uses the following elements:

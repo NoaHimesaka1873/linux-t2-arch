@@ -1,7 +1,7 @@
-From 9636814ad66c66f6e1b1253a2e71356d095991fe Mon Sep 17 00:00:00 2001
+From 95cfbeaaac15e765969a5048c6815c83d59adeec Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Tue, 21 Dec 2021 17:13:49 +0900
-Subject: [PATCH 05/31] brcmfmac: pcie/sdio/usb: Get CLM blob via standard
+Subject: [PATCH 04/29] brcmfmac: pcie/sdio/usb: Get CLM blob via standard
  firmware mechanism
 
 Now that the firmware fetcher can handle per-board CLM files, load the

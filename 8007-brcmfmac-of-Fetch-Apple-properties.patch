@@ -1,7 +1,7 @@
-From 60a3e83f6b07201dcbb0d9cf11ba67d50c635f1e Mon Sep 17 00:00:00 2001
+From c4dec4b6b9efa068d81c347b6c18d22ec40cefef Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Tue, 21 Dec 2021 17:27:19 +0900
-Subject: [PATCH 08/31] brcmfmac: of: Fetch Apple properties
+Subject: [PATCH 07/29] brcmfmac: of: Fetch Apple properties
 
 On Apple ARM64 platforms, firmware selection requires two properties
 that come from system firmware: the module-instance (aka "island", a

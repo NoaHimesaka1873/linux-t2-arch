@@ -1,7 +1,7 @@
-From 9a56730bf7d2b7da3422d36d0a4c0bcd7363a497 Mon Sep 17 00:00:00 2001
+From 410721dd72ac48c1614f79315210dd2d8e6c121b Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Tue, 21 Dec 2021 17:44:00 +0900
-Subject: [PATCH 12/31] brcmfmac: pcie: Fix crashes due to early IRQs
+Subject: [PATCH 11/29] brcmfmac: pcie: Fix crashes due to early IRQs
 
 The driver was enabling IRQs before the message processing was
 initialized. This could cause IRQs to come in too early and crash the

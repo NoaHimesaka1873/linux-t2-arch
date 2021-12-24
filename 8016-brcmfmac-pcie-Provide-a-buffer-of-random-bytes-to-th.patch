@@ -1,7 +1,7 @@
-From b2d207e75c80a71a6cb35e8a8f4a314c71702a33 Mon Sep 17 00:00:00 2001
+From fe487a53188430c60f386f6182ed3df4794e8a02 Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Thu, 23 Dec 2021 19:30:17 +0900
-Subject: [PATCH 17/31] brcmfmac: pcie: Provide a buffer of random bytes to the
+Subject: [PATCH 16/29] brcmfmac: pcie: Provide a buffer of random bytes to the
  device
 
 Newer Apple firmwares on chipsets without a hardware RNG require the

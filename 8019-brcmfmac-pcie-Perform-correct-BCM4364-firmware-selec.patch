@@ -1,7 +1,7 @@
-From 858b9fccf41fc19bba935590f0fabf2d272b1f4e Mon Sep 17 00:00:00 2001
+From 4a3f809670e142a8dc5348780d715353d0a552d3 Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Tue, 21 Dec 2021 17:51:52 +0900
-Subject: [PATCH 20/31] brcmfmac: pcie: Perform correct BCM4364 firmware
+Subject: [PATCH 19/29] brcmfmac: pcie: Perform correct BCM4364 firmware
  selection
 
 This chip exists in two revisions (B2=r3 and B3=r4) on different

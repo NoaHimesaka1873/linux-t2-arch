@@ -1,7 +1,7 @@
-From c8a985941b4aa9044a70abea1ba831feea73f3bc Mon Sep 17 00:00:00 2001
+From 637e3946944e25c98c8955ec2a84133b79afca4d Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Sat, 18 Dec 2021 20:52:04 +0900
-Subject: [PATCH 04/31] brcmfmac: firmware: Handle per-board clm_blob files
+Subject: [PATCH 03/29] brcmfmac: firmware: Handle per-board clm_blob files
 
 Teach brcm_alt_fw_paths to correctly split off variable length
 extensions, and enable alt firmware lookups for the CLM blob firmware
@@ -15,7 +15,7 @@ Signed-off-by: Hector Martin <marcan@marcan.st>
  1 file changed, 8 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c
-index feef3b7f7..3cf906461 100644
+index dff974955..16f342bc5 100644
 --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c
 +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c
 @@ -598,16 +598,16 @@ static const char **brcm_alt_fw_paths(const char *path, const char *board_type)

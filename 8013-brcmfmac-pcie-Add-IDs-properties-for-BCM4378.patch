@@ -1,7 +1,7 @@
-From a92f19b4133bf604ac1b53d43942ee9d8e86ed34 Mon Sep 17 00:00:00 2001
+From c9ce6209905b052f56be85af0066e22a8dc95ba0 Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Tue, 21 Dec 2021 17:46:40 +0900
-Subject: [PATCH 14/31] brcmfmac: pcie: Add IDs/properties for BCM4378
+Subject: [PATCH 13/29] brcmfmac: pcie: Add IDs/properties for BCM4378
 
 This chip is present on Apple M1 (t8103) platforms:
 

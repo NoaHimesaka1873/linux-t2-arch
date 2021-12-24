@@ -1,7 +1,7 @@
-From 7bacc972f0d048054f2b975461a29fd8a4790d94 Mon Sep 17 00:00:00 2001
+From 75ad9fb8bcf639f2bc3546799501f16211d0f76f Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Tue, 21 Dec 2021 17:39:28 +0900
-Subject: [PATCH 28/31] brcmfmac: pcie: Replace brcmf_pcie_copy_mem_todev with
+Subject: [PATCH 27/29] brcmfmac: pcie: Replace brcmf_pcie_copy_mem_todev with
  memcpy_toio
 
 The alignment check was wrong (e.g. & 4 instead of & 3), and the logic

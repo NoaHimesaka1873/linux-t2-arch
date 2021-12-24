@@ -1,7 +1,7 @@
-From 1ef46254f864ed654eb02ec090728d2c7a3a108c Mon Sep 17 00:00:00 2001
+From f715522f5fc21db28a4b37c5f60e46c213bdc4a3 Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Thu, 23 Dec 2021 19:51:36 +0900
-Subject: [PATCH 16/31] brcmfmac: acpi: Add support for fetching Apple ACPI
+Subject: [PATCH 15/29] brcmfmac: acpi: Add support for fetching Apple ACPI
  properties
 
 On DT platforms, the module-instance and antenna-sku-info properties

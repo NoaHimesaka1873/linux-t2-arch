@@ -1,7 +1,7 @@
-From 7a779efda1ff6b0aa2e47b0c5732b4d3a07dfa0a Mon Sep 17 00:00:00 2001
+From 88dd97849b88ced90ced472bb6b3ee47fe900fcb Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Tue, 21 Dec 2021 17:44:51 +0900
-Subject: [PATCH 30/31] brcmfmac: pcie: Release firmwares in the
+Subject: [PATCH 29/29] brcmfmac: pcie: Release firmwares in the
  brcmf_pcie_setup error path
 
 This avoids leaking memory if brcmf_chip_get_raminfo fails. Note that

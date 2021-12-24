@@ -1,7 +1,7 @@
-From ad6c1e5b05a889d66e2c6857049189c8493a851c Mon Sep 17 00:00:00 2001
+From b5124a8d37b7457ba4de0c58813d83d27d41f023 Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Mon, 20 Dec 2021 03:39:44 +0900
-Subject: [PATCH 23/31] brcmfmac: cfg80211: Add support for scan params v2
+Subject: [PATCH 22/29] brcmfmac: cfg80211: Add support for scan params v2
 
 This new API version is required for at least the BCM4387 firmware. Add
 support for it, with a fallback to the v1 API.

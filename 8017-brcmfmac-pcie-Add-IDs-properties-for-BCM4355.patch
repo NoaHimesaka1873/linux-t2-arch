@@ -1,7 +1,7 @@
-From 3630958c1a0709246d1133f9586fd831b78f970c Mon Sep 17 00:00:00 2001
+From d90c77af8822a48814ceade1b74339313ae00691 Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Tue, 21 Dec 2021 17:50:15 +0900
-Subject: [PATCH 18/31] brcmfmac: pcie: Add IDs/properties for BCM4355
+Subject: [PATCH 17/29] brcmfmac: pcie: Add IDs/properties for BCM4355
 
 This chip is present on at least these Apple T2 Macs:
 

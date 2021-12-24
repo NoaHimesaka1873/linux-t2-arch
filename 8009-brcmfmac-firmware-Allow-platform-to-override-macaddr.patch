@@ -1,7 +1,7 @@
-From b5d1ffd62a2bce56e201d0c6214352005be94a3b Mon Sep 17 00:00:00 2001
+From 75593f3222f9229a60d82846ed3ebd9a960f8129 Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Thu, 23 Dec 2021 22:32:08 +0900
-Subject: [PATCH 10/31] brcmfmac: firmware: Allow platform to override macaddr
+Subject: [PATCH 09/29] brcmfmac: firmware: Allow platform to override macaddr
 
 On Device Tree platforms, it is customary to be able to set the MAC
 address via the Device Tree, as it is often stored in system firmware.
@@ -23,7 +23,7 @@ Signed-off-by: Hector Martin <marcan@marcan.st>
  1 file changed, 28 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c
-index 998ae17c6..1492ee552 100644
+index 02e36fa3d..dc4151bcc 100644
 --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c
 +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c
 @@ -21,6 +21,8 @@

@@ -1,7 +1,7 @@
-From bf1fc24122699b32ce2e8dcec354cbef62ee2dc0 Mon Sep 17 00:00:00 2001
+From bb30d189e34dae21efa99fc720361839ea259ae3 Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Tue, 21 Dec 2021 17:26:34 +0900
-Subject: [PATCH 07/31] brcmfmac: pcie: Read Apple OTP information
+Subject: [PATCH 06/29] brcmfmac: pcie: Read Apple OTP information
 
 On Apple platforms, the One Time Programmable ROM in the Broadcom chips
 contains information about the specific board design (module, vendor,

@@ -1,7 +1,7 @@
-From 72e97c5a8d95176ff1b5187fc86f76b6b220599c Mon Sep 17 00:00:00 2001
+From 59c61aa5ad2e12fdbccb5712d35c203cf9079230 Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Sat, 18 Dec 2021 20:38:34 +0900
-Subject: [PATCH 03/31] brcmfmac: firmware: Support having multiple alt paths
+Subject: [PATCH 02/29] brcmfmac: firmware: Support having multiple alt paths
 
 Apple platforms have firmware and config files identified with multiple
 dimensions. We want to be able to find the most specific firmware
@@ -16,7 +16,7 @@ Signed-off-by: Hector Martin <marcan@marcan.st>
  1 file changed, 55 insertions(+), 19 deletions(-)
 
 diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c
-index 0eb13e5df..feef3b7f7 100644
+index 0eb13e5df..dff974955 100644
 --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c
 +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c
 @@ -427,6 +427,8 @@ void brcmf_fw_nvram_free(void *nvram)
@@ -85,8 +85,8 @@ index 0eb13e5df..feef3b7f7 100644
 -		kfree(alt_path);
 -		if (ret == 0)
 -			return ret;
-+		for (i = 0; cur->alt_paths[i]; i++) {
-+			ret = request_firmware(fw, cur->alt_paths[i], fwctx->dev);
++		for (i = 0; alt_paths[i]; i++) {
++			ret = firmware_request_nowarn(fw, alt_paths[i], fwctx->dev);
 +			if (ret == 0) {
 +				brcm_free_alt_fw_paths(alt_paths);
 +				return ret;

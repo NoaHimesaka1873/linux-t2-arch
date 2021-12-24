@@ -1,7 +1,7 @@
-From 90a7b5797874aa14e7527cf772f8f4cda517a3d2 Mon Sep 17 00:00:00 2001
+From b3d5911ace2c31155e87ffad10e3496c855317b3 Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Tue, 21 Dec 2021 17:52:03 +0900
-Subject: [PATCH 27/31] brcmfmac: pcie: Add IDs/properties for BCM4387
+Subject: [PATCH 26/29] brcmfmac: pcie: Add IDs/properties for BCM4387
 
 This chip is present on Apple M1 Pro/Max (t600x) platforms:
 

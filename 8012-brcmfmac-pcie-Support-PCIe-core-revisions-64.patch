@@ -1,7 +1,7 @@
-From 4b3bb7004fb97c1b80a50a7bae9e7d08161e432d Mon Sep 17 00:00:00 2001
+From 381ebd17c00da12a5ef592ebad0a1a3bd6bc5fed Mon Sep 17 00:00:00 2001
 From: Hector Martin <marcan@marcan.st>
 Date: Tue, 21 Dec 2021 17:25:35 +0900
-Subject: [PATCH 13/31] brcmfmac: pcie: Support PCIe core revisions >= 64
+Subject: [PATCH 12/29] brcmfmac: pcie: Support PCIe core revisions >= 64
 
 These newer PCIe core revisions include new sets of registers that must
 be used instead of the legacy ones. Introduce a brcmf_pcie_reginfo to
