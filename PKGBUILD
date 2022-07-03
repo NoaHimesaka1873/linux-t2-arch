@@ -61,6 +61,7 @@ source=(
   # Broadcom Bluetooth device support
   # https://github.com/AsahiLinux/linux/tree/bluetooth-wip
   9001-asahilinux-bluetooth-WIP.patch
+  9002-Bluetooth-fixup.patch
 
 )
 validpgpkeys=(
@@ -269,5 +270,6 @@ sha256sums=('ccd7110dad8dcc260e2891ea3c89bd4aaad0cbe2c055b1280147e76ece20f06c'
             '92e6f4173074ac902c3fc397ea39a5ff6d5eb8645539645c0cd61b3d05ac83ca'
             '9ede98eceb69e9c93e25fdb2c567466963bdd2f81c0ecb9fb9e5107f6142ff26'
             '86b36a173e3608b844ed37dbe909f61b9a1aa593321cd45a5d08e91fe0e809fc'
-            '2bb60e46b9fdaf2923b79d6eccd32c80ba282b50445918f574da466746349177')
+            '7fefea321a8bb61495976503bee8c8e0f98dc74e5770ba93086d24419908543d'
+            'bac184148ada79a6280bb5e353adacbb80eb92fed603df4c434e5953c8c00933')
 # vim:set ts=8 sts=2 sw=2 et:

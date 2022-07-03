@@ -3,8 +3,6 @@ From: Sven Peter <sven@svenpeter.dev>
 Date: Fri, 1 Jul 2022 17:21:01 +0200
 Subject: [PATCH] WIP:/DO-NOT-MERGE: bluetooth
 
-
-redecorating: include irq.h
 ---
  MAINTAINERS                     |    1 +
  drivers/bluetooth/Kconfig       |   12 +
@@ -66,7 +64,7 @@ new file mode 100644
 index 00000000000000..4910c5dc1af4f7
 --- /dev/null
 +++ b/drivers/bluetooth/hci_bcm43xx.c
-@@ -0,0 +1,1939 @@
+@@ -0,0 +1,1938 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
 + * Bluetooth HCI driver for Broadcom 43XX devices attached via PCI
@@ -100,7 +98,6 @@ index 00000000000000..4910c5dc1af4f7
 +#include <linux/completion.h>
 +#include <asm/unaligned.h>
 +#include <linux/printk.h>
-+#include <linux/irq.h>
 +
 +#include <net/bluetooth/bluetooth.h>
 +#include <net/bluetooth/hci_core.h>

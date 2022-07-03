@@ -1,0 +1,98 @@
+From 72677158158cc6ed4badc09c7953bf7280bf3a5a Mon Sep 17 00:00:00 2001
+From: Sven Peter <sven@svenpeter.dev>
+Date: Sat, 2 Jul 2022 17:20:16 +0200
+Subject: [PATCH] fixup! WIP:/DO-NOT-MERGE: bluetooth
+
+---
+ drivers/bluetooth/hci_bcm43xx.c | 31 +++++++++++++++----------------
+ 1 file changed, 15 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/bluetooth/hci_bcm43xx.c b/drivers/bluetooth/hci_bcm43xx.c
+index 4910c5dc1af4f7..b66fd2faa6d04e 100644
+--- a/drivers/bluetooth/hci_bcm43xx.c
++++ b/drivers/bluetooth/hci_bcm43xx.c
+@@ -843,7 +843,7 @@ static int bcm43xx_send_calibration(struct bcm43xx_data *bcm43xx,
+ 	return 0;
+ }
+ 
+-static int bcm43xx_bcm4378_send_calibration(struct bcm43xx_data *bcm43xx)
++static int bcm4378_send_calibration(struct bcm43xx_data *bcm43xx)
+ {
+ 	if (strcmp(bcm43xx->stepping, "b1") == 0)
+ 		return bcm43xx_send_calibration(
+@@ -855,7 +855,7 @@ static int bcm43xx_bcm4378_send_calibration(struct bcm43xx_data *bcm43xx)
+ 						bcm43xx->taurus_cal_size);
+ }
+ 
+-static int bcm43xx_bcm4387_send_calibration(struct bcm43xx_data *bcm43xx)
++static int bcm4387_send_calibration(struct bcm43xx_data *bcm43xx)
+ {
+ 	if (strcmp(bcm43xx->stepping, "c2") == 0)
+ 		return bcm43xx_send_calibration(
+@@ -1367,6 +1367,8 @@ static int bcm43xx_prepare_rings(struct bcm43xx_data *bcm43xx)
+ 
+ static int bcm43xx_setup_msi(struct bcm43xx_data *bcm43xx)
+ {
++#if 0
++	// TODO: looks like this is actually not required?
+ 	struct msi_msg msi_msg;
+ 	int ret;
+ 
+@@ -1375,9 +1377,17 @@ static int bcm43xx_setup_msi(struct bcm43xx_data *bcm43xx)
+ 	if (ret)
+ 		return ret;
+ 
++
+ 	iowrite32(msi_msg.address_lo, bcm43xx->bar0 + BCM43XX_BAR0_MSI_ADDR_LO);
+ 	iowrite32(msi_msg.address_hi, bcm43xx->bar0 + BCM43XX_BAR0_MSI_ADDR_HI);
+ 
++	iowrite32(msi_msg.address_lo,
++		  bcm43xx->bar2 + BCM43XX_BAR2_RTI_MSI_ADDR_LO);
++	iowrite32(msi_msg.address_hi,
++		  bcm43xx->bar2 + BCM43XX_BAR2_RTI_MSI_ADDR_HI);
++	iowrite32(msi_msg.data, bcm43xx->bar2 + BCM43XX_BAR2_RTI_MSI_DATA);
++#endif
++
+ 	return 0;
+ }
+ 
+@@ -1442,20 +1452,9 @@ static int bcm43xx_boot(struct bcm43xx_data *bcm43xx)
+ static int bcm43xx_setup_rti(struct bcm43xx_data *bcm43xx)
+ {
+ 	u32 rti_status;
+-	struct msi_msg msi_msg;
+ 	int ret;
+ 
+-	ret = irq_chip_compose_msi_msg(irq_get_irq_data(bcm43xx->irq),
+-				       &msi_msg);
+-	if (ret)
+-		return ret;
+-
+-	/* setup and start RTI (?) */
+-	iowrite32(msi_msg.address_lo,
+-		  bcm43xx->bar2 + BCM43XX_BAR2_RTI_MSI_ADDR_LO);
+-	iowrite32(msi_msg.address_hi,
+-		  bcm43xx->bar2 + BCM43XX_BAR2_RTI_MSI_ADDR_HI);
+-	iowrite32(msi_msg.data, bcm43xx->bar2 + BCM43XX_BAR2_RTI_MSI_DATA);
++	/* start RTI */
+ 	iowrite32(1, bcm43xx->bar0 + BCM43XX_BAR0_RTI_CONTROL);
+ 
+ 	ret = wait_for_completion_interruptible_timeout(&bcm43xx->event, 1000);
+@@ -1894,7 +1893,7 @@ static const struct bcm43xx_hw bcm43xx_hw_variants[] = {
+ 		.bar0_window5 = 0x18107000,
+ 		.has_bar0_window5 = true,
+ 		.m2m_reset_on_ss_reset_disabled = false,
+-		.send_calibration = bcm43xx_bcm4378_send_calibration,
++		.send_calibration = bcm4378_send_calibration,
+ 	},
+ 
+ 	[BCM4387]= {
+@@ -1904,7 +1903,7 @@ static const struct bcm43xx_hw bcm43xx_hw_variants[] = {
+ 		.bar0_window5 = 0x18106000,
+ 		.has_bar0_window5 = true,
+ 		.m2m_reset_on_ss_reset_disabled = true,
+-		.send_calibration = bcm43xx_bcm4387_send_calibration,
++		.send_calibration = bcm4387_send_calibration,
+ 	},
+ };
+ 
