@@ -4,9 +4,9 @@
 #               apple-ibridge drivers, respectively.
 
 pkgbase=linux-t2
-pkgver=5.19.rc4
+pkgver=5.19.rc6
 _srcname=$(echo linux-${pkgver} | sed -e s/\.rc/-rc/)
-pkgrel=4
+pkgrel=5
 pkgdesc='Linux kernel for T2 Macs'
 _srctag=v${pkgver%.*}-${pkgver##*.}
 url="https://github.com/archlinux/linux/commits/$_srctag"
@@ -20,7 +20,7 @@ makedepends=(
 options=('!strip')
 
 source=(
-  https://git.kernel.org/torvalds/t/linux-5.19-rc4.tar.gz
+  https://git.kernel.org/torvalds/t/linux-5.19-rc6.tar.gz
   config         # the main kernel config file
 
   # Arch Linux patches
@@ -60,7 +60,8 @@ source=(
 
   # Broadcom Bluetooth device support
   # https://github.com/AsahiLinux/linux/tree/bluetooth-wip
-  9001-asahilinux-bluetooth-WIP.patch
+  9001-bluetooth-quirk.patch
+  9002-bcm4377-bluetooth-driver.patch
 
 )
 validpgpkeys=(
@@ -250,7 +251,7 @@ for _p in "${pkgname[@]}"; do
   }"
 done
 
-sha256sums=('ccd7110dad8dcc260e2891ea3c89bd4aaad0cbe2c055b1280147e76ece20f06c'
+sha256sums=('4589a4237cb3d17061a0c940fd44e1c87796794eda64fe729c4e916c9d30c579'
             '382aa201a6a6939210dd8668ab052724547b4bd489b38e97502bbd0848061b35'
             '152fc6cc5cd6ddff14b03eefe4810743f33b9f907da9f88252d43fae58a53c90'
             'SKIP'
@@ -269,5 +270,6 @@ sha256sums=('ccd7110dad8dcc260e2891ea3c89bd4aaad0cbe2c055b1280147e76ece20f06c'
             '92e6f4173074ac902c3fc397ea39a5ff6d5eb8645539645c0cd61b3d05ac83ca'
             '9ede98eceb69e9c93e25fdb2c567466963bdd2f81c0ecb9fb9e5107f6142ff26'
             '86b36a173e3608b844ed37dbe909f61b9a1aa593321cd45a5d08e91fe0e809fc'
-            'SKIP')
+            'SKIP'
+            'SKIP' )
 # vim:set ts=8 sts=2 sw=2 et:
