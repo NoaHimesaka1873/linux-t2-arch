@@ -273,5 +273,5 @@ sha256sums=('4cf0d0d0e46c31781a3f571845973b616c07af90d059922bdff3c6ff941bfda4'
             '86b36a173e3608b844ed37dbe909f61b9a1aa593321cd45a5d08e91fe0e809fc'
             'c54c8d50bfac2dc1f87707f76f43c3fd1f77d186caee8a0ffd9f1d3d25b86f55'
             '09b708ebd25e5fa1d1e960a2fa9a276231ded6a23aaac31b306b4277ecaef0b5'
-            '0d4a5ddd15c373b40ac9b3dd33a64b09735daa2a46f554ba43c2b0ecc082207e' )
+            'e46959af9f3f722af6e48e4fade13f4b5922d2af74c9fa58e99df3c7d1436e3d' )
 # vim:set ts=8 sts=2 sw=2 et:
