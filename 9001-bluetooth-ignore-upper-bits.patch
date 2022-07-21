@@ -1,6 +1,6 @@
-From 438fccf4d00bd468da95798c24ddfa9e0e386af5 Mon Sep 17 00:00:00 2001
+From 22ec33944bd1c250986f3b9e5402a367b396d674 Mon Sep 17 00:00:00 2001
 From: Sven Peter <sven@svenpeter.dev>
-Date: Tue, 12 Jul 2022 21:50:24 +0200
+Date: Thu, 21 Jul 2022 19:14:49 +0200
 Subject: [PATCH] Bluetooth: hci_event: Add quirk to ignore upper bits in LE
  Extended Adv
 

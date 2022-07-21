@@ -4,9 +4,9 @@
 #               apple-ibridge drivers, respectively.
 
 pkgbase=linux-t2
-pkgver=5.19.rc6
+pkgver=5.19.rc7
 _srcname=$(echo linux-${pkgver} | sed -e s/\.rc/-rc/)
-pkgrel=5
+pkgrel=6
 pkgdesc='Linux kernel for T2 Macs'
 _srctag=v${pkgver%.*}-${pkgver##*.}
 url="https://github.com/archlinux/linux/commits/$_srctag"
@@ -20,7 +20,7 @@ makedepends=(
 options=('!strip')
 
 source=(
-  https://git.kernel.org/torvalds/t/linux-5.19-rc6.tar.gz
+  https://git.kernel.org/torvalds/t/linux-5.19-rc7.tar.gz
   config         # the main kernel config file
 
   # Arch Linux patches
@@ -60,8 +60,9 @@ source=(
 
   # Broadcom Bluetooth device support
   # https://github.com/AsahiLinux/linux/tree/bluetooth-wip
-  9001-bluetooth-quirk.patch
-  9002-bcm4377-bluetooth-driver.patch
+  9001-bluetooth-ignore-upper-bits.patch
+  9002-bluetooth-disable-extended-scanning.patch
+  9003-bcm4377-bluetooth-driver.patch
 
 )
 validpgpkeys=(
@@ -100,7 +101,7 @@ prepare() {
   echo "Setting config..."
   cp ../config .config
   make olddefconfig
-  ./scripts/config --module CONFIG_BT_HCIBCM43XX
+  ./scripts/config --module CONFIG_BT_HCIBCM4377
   diff -u ../config .config || :
 
   make -s kernelrelease > version
@@ -251,7 +252,7 @@ for _p in "${pkgname[@]}"; do
   }"
 done
 
-sha256sums=('4589a4237cb3d17061a0c940fd44e1c87796794eda64fe729c4e916c9d30c579'
+sha256sums=('4cf0d0d0e46c31781a3f571845973b616c07af90d059922bdff3c6ff941bfda4'
             '382aa201a6a6939210dd8668ab052724547b4bd489b38e97502bbd0848061b35'
             '152fc6cc5cd6ddff14b03eefe4810743f33b9f907da9f88252d43fae58a53c90'
             'SKIP'
@@ -270,6 +271,7 @@ sha256sums=('4589a4237cb3d17061a0c940fd44e1c87796794eda64fe729c4e916c9d30c579'
             '92e6f4173074ac902c3fc397ea39a5ff6d5eb8645539645c0cd61b3d05ac83ca'
             '9ede98eceb69e9c93e25fdb2c567466963bdd2f81c0ecb9fb9e5107f6142ff26'
             '86b36a173e3608b844ed37dbe909f61b9a1aa593321cd45a5d08e91fe0e809fc'
-            'SKIP'
-            'SKIP' )
+            'c54c8d50bfac2dc1f87707f76f43c3fd1f77d186caee8a0ffd9f1d3d25b86f55'
+            '09b708ebd25e5fa1d1e960a2fa9a276231ded6a23aaac31b306b4277ecaef0b5'
+            '0d4a5ddd15c373b40ac9b3dd33a64b09735daa2a46f554ba43c2b0ecc082207e' )
 # vim:set ts=8 sts=2 sw=2 et:

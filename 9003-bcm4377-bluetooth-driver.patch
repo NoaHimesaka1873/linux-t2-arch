@@ -1,15 +1,15 @@
-From 0148a507e34696326e2b63e626cf0dd46c047cfd Mon Sep 17 00:00:00 2001
+From 8435a1b996c369b28d2925705040b303d84fc395 Mon Sep 17 00:00:00 2001
 From: Sven Peter <sven@svenpeter.dev>
-Date: Wed, 6 Jul 2022 20:04:22 +0200
+Date: Thu, 21 Jul 2022 19:14:54 +0200
 Subject: [PATCH] Bluetooth: hci_bcm4377: Add new driver for BCM4377 PCI boards
 
 Signed-off-by: Sven Peter <sven@svenpeter.dev>
 ---
  MAINTAINERS                     |    1 +
  drivers/bluetooth/Kconfig       |   12 +
- drivers/bluetooth/Makefile      |    2 +
- drivers/bluetooth/hci_bcm4377.c | 2108 +++++++++++++++++++++++++++++++
- 4 files changed, 2123 insertions(+)
+ drivers/bluetooth/Makefile      |    1 +
+ drivers/bluetooth/hci_bcm4377.c | 2229 +++++++++++++++++++++++++++++++
+ 4 files changed, 2243 insertions(+)
  create mode 100644 drivers/bluetooth/hci_bcm4377.c
 
 diff --git a/MAINTAINERS b/MAINTAINERS
@@ -25,7 +25,7 @@ index 8965556bace8ce..5e4339064bd9d6 100644
  F:	drivers/i2c/busses/i2c-pasemi-core.c
  F:	drivers/i2c/busses/i2c-pasemi-platform.c
 diff --git a/drivers/bluetooth/Kconfig b/drivers/bluetooth/Kconfig
-index e307074054553a..41450e7f7cd3a9 100644
+index e307074054553a..3e776d210d5e83 100644
 --- a/drivers/bluetooth/Kconfig
 +++ b/drivers/bluetooth/Kconfig
 @@ -274,6 +274,18 @@ config BT_HCIBCM203X
@@ -36,10 +36,10 @@ index e307074054553a..41450e7f7cd3a9 100644
 +config BT_HCIBCM4377
 +	tristate "HCI BCM4377/4378/4387 PCI driver"
 +	depends on PCI
-+	default m
++	select FW_LOADER
 +	help
 +	  Support for Broadcom BCM4377 family bluetooth chipsets attached over
-+	  PCI, which are usually found in Apple machines.
++	  PCI. These are usually found in Apple machines.
 +
 +	  Say Y here to compile support for HCI BCM4377 family devices into the
 +	  kernel or say M to compile it as module (hci_bcm4377).
@@ -48,25 +48,24 @@ index e307074054553a..41450e7f7cd3a9 100644
  	tristate "HCI BPA10x USB driver"
  	depends on USB
 diff --git a/drivers/bluetooth/Makefile b/drivers/bluetooth/Makefile
-index 3321a8aea4a065..b109d8507ad217 100644
+index 3321a8aea4a065..e0b261f24fc983 100644
 --- a/drivers/bluetooth/Makefile
 +++ b/drivers/bluetooth/Makefile
-@@ -33,6 +33,8 @@ obj-$(CONFIG_BT_HCIUART_NOKIA)	+= hci_nokia.o
- 
- obj-$(CONFIG_BT_HCIRSI)		+= btrsi.o
- 
+@@ -6,6 +6,7 @@
+ obj-$(CONFIG_BT_HCIVHCI)	+= hci_vhci.o
+ obj-$(CONFIG_BT_HCIUART)	+= hci_uart.o
+ obj-$(CONFIG_BT_HCIBCM203X)	+= bcm203x.o
 +obj-$(CONFIG_BT_HCIBCM4377)	+= hci_bcm4377.o
-+
- btmrvl-y			:= btmrvl_main.o
- btmrvl-$(CONFIG_DEBUG_FS)	+= btmrvl_debugfs.o
- 
+ obj-$(CONFIG_BT_HCIBPA10X)	+= bpa10x.o
+ obj-$(CONFIG_BT_HCIBFUSB)	+= bfusb.o
+ obj-$(CONFIG_BT_HCIDTL1)	+= dtl1_cs.o
 diff --git a/drivers/bluetooth/hci_bcm4377.c b/drivers/bluetooth/hci_bcm4377.c
 new file mode 100644
-index 00000000000000..a7702db9dd3ee1
+index 00000000000000..ee0f5d12317062
 --- /dev/null
 +++ b/drivers/bluetooth/hci_bcm4377.c
-@@ -0,0 +1,2108 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
+@@ -0,0 +1,2229 @@
++// SPDX-License-Identifier: GPL-2.0-only OR MIT
 +/*
 + * Bluetooth HCI driver for Broadcom 4377 family devices attached via PCIe
 + *
@@ -94,7 +93,7 @@ index 00000000000000..a7702db9dd3ee1
 + *
 + */
 +
-+#define DEBUG
++//#define DEBUG
 +
 +#include <linux/async.h>
 +#include <linux/bitfield.h>
@@ -145,7 +144,7 @@ index 00000000000000..a7702db9dd3ee1
 +#define BCM4377_PCIECFG_BAR0_WINDOW4_DEFAULT 0x18011000
 +#define BCM4377_PCIECFG_BAR2_WINDOW_DEFAULT 0x19000000
 +
-+#define BCM4377_PCIECFG_UNK_CTRL 0x88
++#define BCM4377_PCIECFG_SUBSYSTEM_CTRL 0x88
 +
 +/* BAR0 */
 +#define BCM4377_OTP_SIZE 0xe0
@@ -156,6 +155,10 @@ index 00000000000000..a7702db9dd3ee1
 +
 +#define BCM4377_BAR0_FW_DOORBELL 0x140
 +#define BCM4377_BAR0_RTI_CONTROL 0x144
++
++#define BCM4377_BAR0_SLEEP_MODE 0x150
++#define BCM4377_BAR0_SLEEP_MODE_AWAKE 2
++#define BCM4377_BAR0_SLEEP_MODE_QUIESCED 3
 +
 +#define BCM4377_BAR0_DOORBELL 0x174
 +#define BCM4377_BAR0_DOORBELL_VALUE GENMASK(31, 16)
@@ -345,25 +348,27 @@ index 00000000000000..a7702db9dd3ee1
 +	u8 control_completion_ring_header_size;
 +	u8 control_completion_ring_footer_size;
 +
-+	__le16 _unk0; // inPlaceComp and oOOComp
-+	__le16 _unk1; // piMsi -> interrupt for new perInfo data?
++	__le16 _unk0;
++	__le16 _unk1;
 +
 +	__le64 scratch_pad;
 +	__le32 scratch_pad_size;
 +
-+	__le32 res;
++	__le32 _unk3;
 +} __packed;
 +static_assert(sizeof(struct bcm4377_context) == 0x68);
 +
-+struct bcm4377_hci_send_calibration_cmd {
++#define BCM4378_CALIBRATION_CHUNK_SIZE 0xe6
++struct bcm4378_hci_send_calibration_cmd {
 +	u8 unk;
 +	__le16 blocks_left;
-+	u8 data[0xe6];
++	u8 data[BCM4378_CALIBRATION_CHUNK_SIZE];
 +} __packed;
 +
-+struct bcm4377_hci_send_ptb_cmd {
++#define BCM4378_PTB_CHUNK_SIZE 0xcf
++struct bcm4378_hci_send_ptb_cmd {
 +	__le16 blocks_left;
-+	u8 data[0xcf];
++	u8 data[BCM4378_PTB_CHUNK_SIZE];
 +} __packed;
 +
 +struct bcm4377_ring_state {
@@ -426,14 +431,20 @@ index 00000000000000..a7702db9dd3ee1
 +	u32 bar0_window1;
 +	u32 bar0_window5;
 +
-+	bool has_bar0_window5;
-+	bool m2m_reset_on_ss_reset_disabled;
++	unsigned long has_bar0_window5 : 1;
++	unsigned long clear_pciecfg_subsystem_ctrl_bit19 : 1;
++	unsigned long broken_ext_scan : 1;
++	unsigned long fixup_le_ext_adv_report_evt_type : 1;
++	unsigned long bdaddr_from_fdt : 1;
 +
 +	const char *board_type;
 +
 +	int (*send_calibration)(struct bcm4377_data *bcm4377);
-+	int (*send_ptb)(struct bcm4377_data *bcm4377);
++	int (*send_ptb)(struct bcm4377_data *bcm4377,
++			const struct firmware *fw);
 +};
++
++static const struct bcm4377_hw bcm4377_hw_variants[];
 +
 +struct bcm4377_data {
 +	struct pci_dev *pdev;
@@ -457,8 +468,6 @@ index 00000000000000..a7702db9dd3ee1
 +	const char *board_type;
 +
 +	struct completion event;
-+
-+	int irq;
 +
 +	struct bcm4377_context *ctx;
 +	dma_addr_t ctx_dma;
@@ -812,13 +821,21 @@ index 00000000000000..a7702db9dd3ee1
 +	if (wait)
 +		ring->events[msgid] = &event;
 +
++	/*
++	 * There seems to be a weird hardware errata in the 4377 chip present
++	 * on x86 Mac where the chip stops responding to any commands as soon
++	 * as it has been idle for approximately a few seconds. Poking
++	 * the sleep control register here makes it come alive again.
++	 */
++	iowrite32(BCM4377_BAR0_SLEEP_MODE_AWAKE,
++		  bcm4377->bar0 + BCM4377_BAR0_SLEEP_MODE);
++
 +	dev_dbg(&bcm4377->pdev->dev,
 +		"updating head for transfer queue #%d to %d\n", ring->ring_id,
 +		new_head);
 +	bcm4377->ring_state->xfer_ring_head[ring->ring_id] =
 +		cpu_to_le16(new_head);
 +
-+	// TODO: check if this is actually correct for sync rings
 +	if (!ring->sync)
 +		bcm4377_ring_doorbell(bcm4377, ring->doorbell, new_head);
 +	ret = 0;
@@ -951,7 +968,8 @@ index 00000000000000..a7702db9dd3ee1
 +
 +	/* this primes the device->host side */
 +	if (ring->virtual || ring->d2h_buffers_only) {
-+		bcm4377->ring_state->xfer_ring_head[ring->ring_id] = 0xf;
++		bcm4377->ring_state->xfer_ring_head[ring->ring_id] =
++			cpu_to_le16(0xf);
 +		bcm4377_ring_doorbell(bcm4377, ring->doorbell, 0xf);
 +	}
 +
@@ -981,11 +999,34 @@ index 00000000000000..a7702db9dd3ee1
 +	return ret;
 +}
 +
-+static int bcm4377_send_calibration(struct bcm4377_data *bcm4377,
-+				    const void *cal_blob, size_t cal_blob_size)
++static int __bcm4378_send_calibration_chunk(struct bcm4377_data *bcm4377,
++					    const void *data, size_t data_len,
++					    u16 blocks_left)
 +{
-+	struct bcm4377_hci_send_calibration_cmd cmd;
++	struct bcm4378_hci_send_calibration_cmd cmd;
 +	struct sk_buff *skb;
++
++	if (data_len > sizeof(cmd.data))
++		return -E2BIG;
++
++	memset(&cmd, 0, sizeof(cmd));
++	cmd.unk = 0x03;
++	cmd.blocks_left = cpu_to_le16(blocks_left);
++	memcpy(cmd.data, data, data_len);
++
++	skb = __hci_cmd_sync(bcm4377->hdev, 0xfd97, sizeof(cmd), &cmd,
++			     HCI_INIT_TIMEOUT);
++	if (IS_ERR(skb))
++		return PTR_ERR(skb);
++
++	kfree_skb(skb);
++	return 0;
++}
++
++static int __bcm4378_send_calibration(struct bcm4377_data *bcm4377,
++				      const void *cal_blob,
++				      size_t cal_blob_size)
++{
 +	off_t done = 0;
 +	size_t left = cal_blob_size;
 +	u16 blocks_left;
@@ -997,29 +1038,19 @@ index 00000000000000..a7702db9dd3ee1
 +		return -ENOENT;
 +	}
 +
-+	blocks_left = DIV_ROUND_UP(left, sizeof(cmd.data)) - 1;
++	blocks_left = DIV_ROUND_UP(left, BCM4378_CALIBRATION_CHUNK_SIZE) - 1;
 +
 +	while (left) {
-+		size_t transfer_len = min(left, sizeof(cmd.data));
++		size_t transfer_len =
++			min(left, (size_t)BCM4378_CALIBRATION_CHUNK_SIZE);
 +
-+		memset(&cmd, 0, sizeof(cmd));
-+		cmd.unk = 0x03;
-+		cmd.blocks_left = cpu_to_le16(blocks_left);
-+		memcpy(cmd.data, cal_blob + done, transfer_len);
-+
-+		dev_dbg(&bcm4377->pdev->dev,
-+			"btbcmpci: sending calibration chunk; left (chunks): %d, left(bytes): %zu\n",
-+			cmd.blocks_left, left);
-+
-+		skb = __hci_cmd_sync(bcm4377->hdev, 0xfd97, sizeof(cmd), &cmd,
-+				     HCI_INIT_TIMEOUT);
-+		if (IS_ERR(skb)) {
-+			ret = PTR_ERR(skb);
++		ret = __bcm4378_send_calibration_chunk(
++			bcm4377, cal_blob + done, transfer_len, blocks_left);
++		if (ret) {
 +			dev_err(&bcm4377->pdev->dev,
-+				"btbcmpci: send calibration failed (%d)", ret);
++				"send calibration chunk failed with %d\n", ret);
 +			return ret;
 +		}
-+		kfree_skb(skb);
 +
 +		blocks_left--;
 +		left -= transfer_len;
@@ -1033,25 +1064,25 @@ index 00000000000000..a7702db9dd3ee1
 +{
 +	if ((strcmp(bcm4377->stepping, "b1") == 0) ||
 +	    strcmp(bcm4377->stepping, "b3") == 0)
-+		return bcm4377_send_calibration(
++		return __bcm4378_send_calibration(
 +			bcm4377, bcm4377->taurus_beamforming_cal_blob,
 +			bcm4377->taurus_beamforming_cal_size);
 +	else
-+		return bcm4377_send_calibration(bcm4377,
-+						bcm4377->taurus_cal_blob,
-+						bcm4377->taurus_cal_size);
++		return __bcm4378_send_calibration(bcm4377,
++						  bcm4377->taurus_cal_blob,
++						  bcm4377->taurus_cal_size);
 +}
 +
 +static int bcm4387_send_calibration(struct bcm4377_data *bcm4377)
 +{
 +	if (strcmp(bcm4377->stepping, "c2") == 0)
-+		return bcm4377_send_calibration(
++		return __bcm4378_send_calibration(
 +			bcm4377, bcm4377->taurus_beamforming_cal_blob,
 +			bcm4377->taurus_beamforming_cal_size);
 +	else
-+		return bcm4377_send_calibration(bcm4377,
-+						bcm4377->taurus_cal_blob,
-+						bcm4377->taurus_cal_size);
++		return __bcm4378_send_calibration(bcm4377,
++						  bcm4377->taurus_cal_blob,
++						  bcm4377->taurus_cal_size);
 +}
 +
 +static const struct firmware *bcm4377_request_blob(struct bcm4377_data *bcm4377,
@@ -1085,85 +1116,78 @@ index 00000000000000..a7702db9dd3ee1
 +	return NULL;
 +}
 +
-+static int bcm4377_send_ptb(struct bcm4377_data *bcm4377)
++static int bcm4377_send_ptb(struct bcm4377_data *bcm4377,
++			    const struct firmware *fw)
 +{
-+	const struct firmware *fw;
 +	struct sk_buff *skb;
 +	int ret = 0;
-+
-+	fw = bcm4377_request_blob(bcm4377, "ptb");
-+	if (!fw) {
-+		dev_err(&bcm4377->pdev->dev, "failed to load PTB data");
-+		return -ENOENT;
-+	}
 +
 +	skb = __hci_cmd_sync(bcm4377->hdev, 0xfd98, fw->size, fw->data,
 +			     HCI_INIT_TIMEOUT);
 +	if (IS_ERR(skb)) {
 +		ret = PTR_ERR(skb);
 +		dev_err(&bcm4377->pdev->dev, "sending ptb failed (%d)", ret);
-+		goto out;
++		return ret;
 +	}
-+	kfree_skb(skb);
 +
-+out:
-+	release_firmware(fw);
++	kfree_skb(skb);
 +	return ret;
 +}
 +
-+static int bcm4378_send_ptb(struct bcm4377_data *bcm4377)
++static int bcm4378_send_ptb_chunk(struct bcm4377_data *bcm4377,
++				  const void *data, size_t data_len,
++				  u16 blocks_left)
 +{
-+	const struct firmware *fw;
-+	struct bcm4377_hci_send_ptb_cmd cmd;
++	struct bcm4378_hci_send_ptb_cmd cmd;
 +	struct sk_buff *skb;
-+	off_t done = 0;
-+	size_t left;
-+	u16 blocks_left;
-+	int ret = 0;
 +
-+	fw = bcm4377_request_blob(bcm4377, "ptb");
-+	if (!fw) {
-+		dev_err(&bcm4377->pdev->dev, "failed to load PTB data");
-+		return -ENOENT;
-+	}
++	if (data_len > BCM4378_PTB_CHUNK_SIZE)
++		return -E2BIG;
 +
-+	left = fw->size;
-+	blocks_left = DIV_ROUND_UP(left, sizeof(cmd.data)) - 1;
++	memset(&cmd, 0, sizeof(cmd));
++	cmd.blocks_left = cpu_to_le16(blocks_left);
++	memcpy(cmd.data, data, data_len);
 +
-+	while (left) {
-+		size_t transfer_len = min(left, sizeof(cmd.data));
++	skb = __hci_cmd_sync(bcm4377->hdev, 0xfe0d, sizeof(cmd), &cmd,
++			     HCI_INIT_TIMEOUT);
++	if (IS_ERR(skb))
++		return PTR_ERR(skb);
 +
-+		memset(&cmd, 0, sizeof(cmd));
-+		cmd.blocks_left = cpu_to_le16(blocks_left);
-+		memcpy(cmd.data, fw->data + done, transfer_len);
++	kfree_skb(skb);
++	return 0;
++}
 +
-+		dev_dbg(&bcm4377->pdev->dev,
-+			"btbcmpci: sending ptb chunk; left: %zu\n", left);
++static int bcm4378_send_ptb(struct bcm4377_data *bcm4377,
++			    const struct firmware *fw)
++{
++	size_t chunks = DIV_ROUND_UP(fw->size, (size_t)BCM4378_PTB_CHUNK_SIZE);
++	size_t i, left, transfer_len;
++	int ret;
 +
-+		skb = __hci_cmd_sync(bcm4377->hdev, 0xfe0d, sizeof(cmd), &cmd,
-+				     HCI_INIT_TIMEOUT);
-+		if (IS_ERR(skb)) {
-+			ret = PTR_ERR(skb);
++	for (i = 0, left = fw->size; i < chunks; ++i, left -= transfer_len) {
++		transfer_len = min(left, (size_t)BCM4378_PTB_CHUNK_SIZE);
++
++		dev_dbg(&bcm4377->pdev->dev, "sending ptb chunk %zu/%zu\n",
++			i + 1, chunks);
++		ret = bcm4378_send_ptb_chunk(
++			bcm4377, fw->data + i * BCM4378_PTB_CHUNK_SIZE,
++			transfer_len, chunks - i - 1);
++		if (ret) {
 +			dev_err(&bcm4377->pdev->dev,
-+				"btbcmpci: sending ptb failed (%d)", ret);
-+			goto out;
++				"sending ptb chunk %zu failed (%d)", i, ret);
++			return ret;
 +		}
-+		kfree_skb(skb);
-+
-+		blocks_left--;
-+		left -= transfer_len;
-+		done += transfer_len;
 +	}
 +
-+out:
-+	release_firmware(fw);
-+	return ret;
++	return 0;
 +}
 +
 +static int bcm4377_hci_open(struct hci_dev *hdev)
 +{
 +	struct bcm4377_data *bcm4377 = hci_get_drvdata(hdev);
 +	int ret;
++
++	dev_dbg(&bcm4377->pdev->dev, "creating rings\n");
 +
 +	ret = bcm4377_create_completion_ring(bcm4377,
 +					     &bcm4377->hci_acl_ack_ring);
@@ -1232,6 +1256,8 @@ index 00000000000000..a7702db9dd3ee1
 +{
 +	struct bcm4377_data *bcm4377 = hci_get_drvdata(hdev);
 +
++	dev_dbg(&bcm4377->pdev->dev, "destroying rings in hci_close\n");
++
 +	bcm4377_destroy_transfer_ring(bcm4377, &bcm4377->acl_d2h_ring);
 +	bcm4377_destroy_transfer_ring(bcm4377, &bcm4377->acl_h2d_ring);
 +	bcm4377_destroy_transfer_ring(bcm4377, &bcm4377->sco_d2h_ring);
@@ -1250,6 +1276,7 @@ index 00000000000000..a7702db9dd3ee1
 +static int bcm4377_hci_setup(struct hci_dev *hdev)
 +{
 +	struct bcm4377_data *bcm4377 = hci_get_drvdata(hdev);
++	const struct firmware *fw;
 +	int ret;
 +
 +	if (bcm4377->hw->send_calibration) {
@@ -1258,11 +1285,16 @@ index 00000000000000..a7702db9dd3ee1
 +			return ret;
 +	}
 +
-+	ret = bcm4377->hw->send_ptb(bcm4377);
-+	if (ret)
-+		return ret;
++	fw = bcm4377_request_blob(bcm4377, "ptb");
++	if (!fw) {
++		dev_err(&bcm4377->pdev->dev, "failed to load PTB data");
++		return -ENOENT;
++	}
 +
-+	return 0;
++	ret = bcm4377->hw->send_ptb(bcm4377, fw);
++	release_firmware(fw);
++
++	return ret;
 +}
 +
 +static int bcm4377_hci_send_frame(struct hci_dev *hdev, struct sk_buff *skb)
@@ -1304,15 +1336,15 @@ index 00000000000000..a7702db9dd3ee1
 +
 +static int bcm4377_hci_set_bdaddr(struct hci_dev *hdev, const bdaddr_t *bdaddr)
 +{
++	struct bcm4377_data *bcm4377 = hci_get_drvdata(hdev);
 +	struct sk_buff *skb;
 +	int err;
 +
 +	skb = __hci_cmd_sync(hdev, 0xfc01, 6, bdaddr, HCI_INIT_TIMEOUT);
 +	if (IS_ERR(skb)) {
 +		err = PTR_ERR(skb);
-+		bt_dev_err(hdev,
-+			   "hci_bcm4377: Change address command failed (%d)",
-+			   err);
++		dev_err(&bcm4377->pdev->dev,
++			"Change address command failed (%d)", err);
 +		return err;
 +	}
 +	kfree_skb(skb);
@@ -1466,6 +1498,9 @@ index 00000000000000..a7702db9dd3ee1
 +	bcm4377->ctx->control_xfer_ring_footer_size =
 +		bcm4377->control_h2d_ring.payload_size / 4;
 +
++	dev_dbg(&bcm4377->pdev->dev, "context initialized at IOVA %pad",
++		&bcm4377->ctx_dma);
++
 +	return 0;
 +}
 +
@@ -1614,16 +1649,33 @@ index 00000000000000..a7702db9dd3ee1
 +	if (ret)
 +		return ret;
 +
++	dev_dbg(&bcm4377->pdev->dev, "all rings allocated and prepared\n");
++
 +	return 0;
 +}
 +
 +static int bcm4377_boot(struct bcm4377_data *bcm4377)
 +{
-+	u32 bootstage;
 +	const struct firmware *fw;
 +	void *bfr;
 +	dma_addr_t fw_dma;
 +	int ret = 0;
++	u32 bootstage, rti_status;
++
++	bootstage = ioread32(bcm4377->bar2 + BCM4377_BAR2_BOOTSTAGE);
++	rti_status = ioread32(bcm4377->bar2 + BCM4377_BAR2_RTI_STATUS);
++
++	if (bootstage != 0) {
++		dev_err(&bcm4377->pdev->dev, "bootstage is %d and not 0\n",
++			bootstage);
++		return -EINVAL;
++	}
++
++	if (rti_status != 0) {
++		dev_err(&bcm4377->pdev->dev, "RTI status is %d and not 0\n",
++			rti_status);
++		return -EINVAL;
++	}
 +
 +	fw = bcm4377_request_blob(bcm4377, "bin");
 +	if (!fw) {
@@ -1650,6 +1702,8 @@ index 00000000000000..a7702db9dd3ee1
 +	iowrite32(fw->size, bcm4377->bar2 + BCM4377_BAR2_FW_SIZE);
 +	iowrite32(0, bcm4377->bar0 + BCM4377_BAR0_FW_DOORBELL);
 +
++	dev_dbg(&bcm4377->pdev->dev, "waiting for firmware to boot\n");
++
 +	ret = wait_for_completion_interruptible_timeout(
 +		&bcm4377->event, BCM4377_DEFAULT_TIMEOUT);
 +	if (ret == 0) {
@@ -1659,15 +1713,15 @@ index 00000000000000..a7702db9dd3ee1
 +		goto out_dma_free;
 +	}
 +
-+	bootstage = ioread32(bcm4377->bar2 + BCM4377_BAR2_BOOTSTAGE);
-+	if (bootstage != 2) {
-+		dev_err(&bcm4377->pdev->dev, "boostage %d != 2\n", bootstage);
++	if (bcm4377->bootstage != 2) {
++		dev_err(&bcm4377->pdev->dev, "boostage %d != 2\n",
++			bcm4377->bootstage);
 +		ret = -ENXIO;
 +		goto out_dma_free;
 +	}
 +
 +	dev_dbg(&bcm4377->pdev->dev, "firmware has booted (stage = %x)\n",
-+		bootstage);
++		bcm4377->bootstage);
 +	ret = 0;
 +
 +out_dma_free:
@@ -1679,10 +1733,9 @@ index 00000000000000..a7702db9dd3ee1
 +
 +static int bcm4377_setup_rti(struct bcm4377_data *bcm4377)
 +{
-+	u32 rti_status;
 +	int ret;
 +
-+	/* start RTI */
++	dev_dbg(&bcm4377->pdev->dev, "starting RTI\n");
 +	iowrite32(1, bcm4377->bar0 + BCM4377_BAR0_RTI_CONTROL);
 +
 +	ret = wait_for_completion_interruptible_timeout(
@@ -1695,10 +1748,9 @@ index 00000000000000..a7702db9dd3ee1
 +		return ret;
 +	}
 +
-+	rti_status = ioread32(bcm4377->bar2 + BCM4377_BAR2_RTI_STATUS);
-+	if (rti_status != 1) {
++	if (bcm4377->rti_status != 1) {
 +		dev_err(&bcm4377->pdev->dev, "RTI did not ack state 1 (%d)\n",
-+			rti_status);
++			bcm4377->rti_status);
 +		return -ENODEV;
 +	}
 +	dev_dbg(&bcm4377->pdev->dev, "RTI is in state 1\n");
@@ -1726,10 +1778,9 @@ index 00000000000000..a7702db9dd3ee1
 +		return ret;
 +	}
 +
-+	rti_status = ioread32(bcm4377->bar2 + BCM4377_BAR2_RTI_STATUS);
-+	if (rti_status != 2) {
++	if (bcm4377->rti_status != 2) {
 +		dev_err(&bcm4377->pdev->dev, "RTI did not ack state 2 (%d)\n",
-+			rti_status);
++			bcm4377->rti_status);
 +		return -ENODEV;
 +	}
 +
@@ -1943,18 +1994,17 @@ index 00000000000000..a7702db9dd3ee1
 +	if (ret)
 +		return ret;
 +
-+	ret = pci_read_config_dword(bcm4377->pdev, BCM4377_PCIECFG_UNK_CTRL,
-+				    &ctrl);
++	ret = pci_read_config_dword(bcm4377->pdev,
++				    BCM4377_PCIECFG_SUBSYSTEM_CTRL, &ctrl);
 +	if (ret)
 +		return ret;
 +
-+	// TODO: 19 and 16 are probably M2M and SS reset
-+	if (bcm4377->hw->m2m_reset_on_ss_reset_disabled)
-+		ctrl &= ~BIT(19); // BIT(19) = M2M reset?
++	if (bcm4377->hw->clear_pciecfg_subsystem_ctrl_bit19)
++		ctrl &= ~BIT(19);
 +	ctrl |= BIT(16);
 +
-+	return pci_write_config_dword(bcm4377->pdev, BCM4377_PCIECFG_UNK_CTRL,
-+				      ctrl);
++	return pci_write_config_dword(bcm4377->pdev,
++				      BCM4377_PCIECFG_SUBSYSTEM_CTRL, ctrl);
 +}
 +
 +static int bcm4377_probe_of(struct bcm4377_data *bcm4377)
@@ -1991,13 +2041,26 @@ index 00000000000000..a7702db9dd3ee1
 +	return 0;
 +}
 +
-+static const struct bcm4377_hw bcm4377_hw_variants[];
++static void bcm4377_pci_free_irq_vectors(void *data)
++{
++	pci_free_irq_vectors(data);
++}
++
++static void bcm4377_hci_free_dev(void *data)
++{
++	hci_free_dev(data);
++}
++
++static void bcm4377_hci_unregister_dev(void *data)
++{
++	hci_unregister_dev(data);
++}
 +
 +static int bcm4377_probe(struct pci_dev *pdev, const struct pci_device_id *id)
 +{
 +	struct bcm4377_data *bcm4377;
 +	struct hci_dev *hdev;
-+	int ret;
++	int ret, irq;
 +
 +	ret = dma_set_mask_and_coherent(&pdev->dev, BCM4377_DMA_MASK);
 +	if (ret)
@@ -2028,6 +2091,22 @@ index 00000000000000..a7702db9dd3ee1
 +		return ret;
 +	}
 +
++	/* _locked because we already hold dev->lock */
++	ret = pci_reset_function_locked(pdev);
++	if (ret)
++		dev_warn(
++			&pdev->dev,
++			"function level reset failed with %d; trying to continue anyway\n",
++			ret);
++
++	/*
++	 * If this number is too low and we try to access any BAR too
++	 * early the device will crash. Experiments have shown that
++	 * approximately 50 msec is the minimum amount we have to wait.
++	 * Let's double that to be safe.
++	 */
++	msleep(100);
++
 +	ret = pci_enable_device(pdev);
 +	if (ret)
 +		return ret;
@@ -2051,31 +2130,31 @@ index 00000000000000..a7702db9dd3ee1
 +	}
 +
 +	/*
-+	* Legacy interrupts result in an IRQ storm at least on Apple Silicon
-+	* platforms.
-+	*/
-+	ret = pci_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_MSI | PCI_IRQ_MSIX);
++	 * Legacy interrupts result in an IRQ storm because we don't know where
++	 * the interrupt mask and status registers for these chips are.
++	 * MSIs are acked automatically instead.
++	 */
++	ret = pci_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_MSI);
 +	if (ret < 0)
 +		return -ENODEV;
-+	ret = devm_add_action_or_reset(
-+		&pdev->dev, (void (*)(void *))pci_free_irq_vectors, pdev);
++	ret = devm_add_action_or_reset(&pdev->dev, bcm4377_pci_free_irq_vectors,
++				       pdev);
 +	if (ret)
 +		return ret;
 +
-+	bcm4377->irq = pci_irq_vector(pdev, 0);
-+	if (bcm4377->irq <= 0)
++	irq = pci_irq_vector(pdev, 0);
++	if (irq <= 0)
 +		return -ENODEV;
 +
-+	ret = devm_request_irq(&pdev->dev, bcm4377->irq, bcm4377_irq, 0,
-+			       "bcm4377", bcm4377);
++	ret = devm_request_irq(&pdev->dev, irq, bcm4377_irq, 0, "bcm4377",
++			       bcm4377);
 +	if (ret)
 +		return ret;
 +
 +	hdev = hci_alloc_dev();
 +	if (!hdev)
 +		return -ENOMEM;
-+	ret = devm_add_action_or_reset(&pdev->dev,
-+				       (void (*)(void *))hci_free_dev, hdev);
++	ret = devm_add_action_or_reset(&pdev->dev, bcm4377_hci_free_dev, hdev);
 +	if (ret)
 +		return ret;
 +
@@ -2089,10 +2168,15 @@ index 00000000000000..a7702db9dd3ee1
 +	hdev->set_bdaddr = bcm4377_hci_set_bdaddr;
 +	hdev->setup = bcm4377_hci_setup;
 +
-+	/* non-DT devices have the address stored inside a ROM */
-+	if (pdev->dev.of_node)
++	if (bcm4377->hw->broken_ext_scan)
++		set_bit(HCI_QUIRK_BROKEN_EXT_SCAN, &hdev->quirks);
++	if (bcm4377->hw->fixup_le_ext_adv_report_evt_type)
++		set_bit(HCI_QUIRK_FIXUP_LE_EXT_ADV_REPORT_EVT_TYPE,
++			&hdev->quirks);
++	if (bcm4377->hw->bdaddr_from_fdt) {
 +		set_bit(HCI_QUIRK_USE_BDADDR_PROPERTY, &hdev->quirks);
-+	set_bit(HCI_QUIRK_FIXUP_LE_EXT_ADV_REPORT_EVT_TYPE, &hdev->quirks);
++		set_bit(HCI_QUIRK_INVALID_BDADDR, &hdev->quirks);
++	}
 +
 +	pci_set_drvdata(pdev, bcm4377);
 +	hci_set_drvdata(hdev, bcm4377);
@@ -2109,8 +2193,33 @@ index 00000000000000..a7702db9dd3ee1
 +	ret = hci_register_dev(hdev);
 +	if (ret)
 +		return ret;
-+	return devm_add_action_or_reset(
-+		&pdev->dev, (void (*)(void *))hci_unregister_dev, hdev);
++	return devm_add_action_or_reset(&pdev->dev, bcm4377_hci_unregister_dev,
++					hdev);
++}
++
++static int bcm4377_suspend(struct pci_dev *pdev, pm_message_t state)
++{
++	struct bcm4377_data *bcm4377 = pci_get_drvdata(pdev);
++	int ret;
++
++	ret = hci_suspend_dev(bcm4377->hdev);
++	if (ret)
++		return ret;
++
++	iowrite32(BCM4377_BAR0_SLEEP_MODE_QUIESCED,
++		  bcm4377->bar0 + BCM4377_BAR0_SLEEP_MODE);
++
++	return 0;
++}
++
++static int bcm4377_resume(struct pci_dev *pdev)
++{
++	struct bcm4377_data *bcm4377 = pci_get_drvdata(pdev);
++
++	iowrite32(BCM4377_BAR0_SLEEP_MODE_AWAKE,
++		  bcm4377->bar0 + BCM4377_BAR0_SLEEP_MODE);
++
++	return hci_resume_dev(bcm4377->hdev);
 +}
 +
 +static const struct bcm4377_hw bcm4377_hw_variants[] = {
@@ -2120,6 +2229,7 @@ index 00000000000000..a7702db9dd3ee1
 +		.bar0_window0 = 0x1800b000,
 +		.bar0_window1 = 0x1810c000,
 +		.board_type = "apple,formosa",
++		.broken_ext_scan = true,
 +		.send_ptb = bcm4377_send_ptb,
 +	},
 +
@@ -2130,6 +2240,8 @@ index 00000000000000..a7702db9dd3ee1
 +		.bar0_window1 = 0x1810a000,
 +		.bar0_window5 = 0x18107000,
 +		.has_bar0_window5 = true,
++		.fixup_le_ext_adv_report_evt_type = true,
++		.bdaddr_from_fdt = true,
 +		.send_calibration = bcm4378_send_calibration,
 +		.send_ptb = bcm4378_send_ptb,
 +	},
@@ -2141,7 +2253,9 @@ index 00000000000000..a7702db9dd3ee1
 +		.bar0_window1 = 0x18109000,
 +		.bar0_window5 = 0x18106000,
 +		.has_bar0_window5 = true,
-+		.m2m_reset_on_ss_reset_disabled = true,
++		.clear_pciecfg_subsystem_ctrl_bit19 = true,
++		.fixup_le_ext_adv_report_evt_type = true,
++		.bdaddr_from_fdt = true,
 +		.send_calibration = bcm4387_send_calibration,
 +		.send_ptb = bcm4378_send_ptb,
 +	},
@@ -2166,11 +2280,17 @@ index 00000000000000..a7702db9dd3ee1
 +	.name = "hci_bcm4377",
 +	.id_table = bcm4377_devid_table,
 +	.probe = bcm4377_probe,
++	.suspend = bcm4377_suspend,
++	.resume = bcm4377_resume,
 +};
 +module_pci_driver(bcm4377_pci_driver);
 +
 +MODULE_AUTHOR("Sven Peter <sven@svenpeter.dev>");
 +MODULE_DESCRIPTION("Bluetooth support for Broadcom 4377-family PCIe devices");
-+MODULE_LICENSE("GPL");
-+MODULE_FIRMWARE("brcm/brcmbt43*.bin");
-+MODULE_FIRMWARE("brcm/brcmbt43*.ptb");
++MODULE_LICENSE("Dual MIT/GPL");
++MODULE_FIRMWARE("brcm/brcmbt4377*.bin");
++MODULE_FIRMWARE("brcm/brcmbt4377*.ptb");
++MODULE_FIRMWARE("brcm/brcmbt4378*.bin");
++MODULE_FIRMWARE("brcm/brcmbt4378*.ptb");
++MODULE_FIRMWARE("brcm/brcmbt4387*.bin");
++MODULE_FIRMWARE("brcm/brcmbt4387*.ptb");
