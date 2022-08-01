@@ -185,7 +185,7 @@ Signed-off-by: Sven Peter <sven@svenpeter.dev>
  create mode 100644 drivers/bluetooth/hci_bcm4377.c
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 8965556bace8ce..5e4339064bd9d6 100644
+index 8965556bace8..5e4339064bd9 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
 @@ -1845,6 +1845,7 @@ F:	Documentation/devicetree/bindings/pinctrl/apple,pinctrl.yaml
@@ -197,7 +197,7 @@ index 8965556bace8ce..5e4339064bd9d6 100644
  F:	drivers/i2c/busses/i2c-pasemi-core.c
  F:	drivers/i2c/busses/i2c-pasemi-platform.c
 diff --git a/drivers/bluetooth/Kconfig b/drivers/bluetooth/Kconfig
-index e307074054553a..47f7baf20bb842 100644
+index e30707405455..47f7baf20bb8 100644
 --- a/drivers/bluetooth/Kconfig
 +++ b/drivers/bluetooth/Kconfig
 @@ -274,6 +274,18 @@ config BT_HCIBCM203X
@@ -220,7 +220,7 @@ index e307074054553a..47f7baf20bb842 100644
  	tristate "HCI BPA10x USB driver"
  	depends on USB
 diff --git a/drivers/bluetooth/Makefile b/drivers/bluetooth/Makefile
-index 3321a8aea4a065..e0b261f24fc983 100644
+index 3321a8aea4a0..e0b261f24fc9 100644
 --- a/drivers/bluetooth/Makefile
 +++ b/drivers/bluetooth/Makefile
 @@ -6,6 +6,7 @@
@@ -233,7 +233,7 @@ index 3321a8aea4a065..e0b261f24fc983 100644
  obj-$(CONFIG_BT_HCIDTL1)	+= dtl1_cs.o
 diff --git a/drivers/bluetooth/hci_bcm4377.c b/drivers/bluetooth/hci_bcm4377.c
 new file mode 100644
-index 00000000000000..d99aa553ff0599
+index 000000000000..e5db0ac8a81b
 --- /dev/null
 +++ b/drivers/bluetooth/hci_bcm4377.c
 @@ -0,0 +1,2466 @@
@@ -248,7 +248,6 @@ index 00000000000000..d99aa553ff0599
 +#include <linux/bitfield.h>
 +#include <linux/completion.h>
 +#include <linux/dma-mapping.h>
-+#include <linux/dmi.h>
 +#include <linux/firmware.h>
 +#include <linux/module.h>
 +#include <linux/msi.h>
@@ -271,7 +270,7 @@ index 00000000000000..d99aa553ff0599
 +#define BCM4378_DEVICE_ID 0x5f69
 +#define BCM4387_DEVICE_ID 0x5f71
 +
-+#define BCM4377_DEFAULT_TIMEOUT 1000
++#define BCM4377_TIMEOUT 1000
 +
 +/*
 + * These devices only support DMA transactions inside a 32bit window
@@ -283,14 +282,14 @@ index 00000000000000..d99aa553ff0599
 + */
 +#define BCM4377_DMA_MASK 0xfffffe00
 +
-+#define BCM4377_PCIECFG_BAR0_WINDOW0 0x80
-+#define BCM4377_PCIECFG_BAR0_WINDOW1 0x70
-+#define BCM4377_PCIECFG_BAR0_WINDOW4 0x74
-+#define BCM4377_PCIECFG_BAR0_WINDOW5 0x78
-+#define BCM4377_PCIECFG_BAR2_WINDOW  0x84
++#define BCM4377_PCIECFG_BAR0_WINDOW1	   0x80
++#define BCM4377_PCIECFG_BAR0_WINDOW2	   0x70
++#define BCM4377_PCIECFG_BAR0_CORE2_WINDOW1 0x74
++#define BCM4377_PCIECFG_BAR0_CORE2_WINDOW2 0x78
++#define BCM4377_PCIECFG_BAR2_WINDOW	   0x84
 +
-+#define BCM4377_PCIECFG_BAR0_WINDOW4_DEFAULT 0x18011000
-+#define BCM4377_PCIECFG_BAR2_WINDOW_DEFAULT  0x19000000
++#define BCM4377_PCIECFG_BAR0_CORE2_WINDOW1_DEFAULT 0x18011000
++#define BCM4377_PCIECFG_BAR2_WINDOW_DEFAULT	   0x19000000
 +
 +#define BCM4377_PCIECFG_SUBSYSTEM_CTRL 0x88
 +
@@ -719,10 +718,12 @@ index 00000000000000..d99aa553ff0599
 + *
 + * id: Chip id (e.g. 0x4377 for BCM4377)
 + * otp_offset: Offset to the start of the OTP inside BAR0
-+ * bar0_window0: Backplane address of the first window to be visible in BAR0
-+ * bar0_window1: Backplane address of the second window to be visible in BAR0
-+ * bar0_window5: Backplane address of the fifth window to be visible in BAR0
-+ * has_bar0_window5: Set to true if this chip requires window5 to be configured
++ * bar0_window1: Backplane address mapped to the first window in BAR0
++ * bar0_window2: Backplane address mapped to the second window in BAR0
++ * bar0_core2_window2: Optional backplane address mapped to the second core's
++ *                     second window in BAR0
++ * has_bar0_core2_window2: Set to true if this chip requires the second core's
++ *                         second window to be configured
 + * clear_pciecfg_subsystem_ctrl_bit19: Set to true if bit 19 in the
 + *                                     vendor-specific subsystem control
 + *                                     register has to be cleared
@@ -741,11 +742,11 @@ index 00000000000000..d99aa553ff0599
 +
 +	u32 otp_offset;
 +
-+	u32 bar0_window0;
 +	u32 bar0_window1;
-+	u32 bar0_window5;
++	u32 bar0_window2;
++	u32 bar0_core2_window2;
 +
-+	unsigned long has_bar0_window5 : 1;
++	unsigned long has_bar0_core2_window2 : 1;
 +	unsigned long clear_pciecfg_subsystem_ctrl_bit19 : 1;
 +	unsigned long disable_aspm : 1;
 +	unsigned long broken_ext_scan : 1;
@@ -1188,7 +1189,7 @@ index 00000000000000..d99aa553ff0599
 +
 +	if (ret == 0 && wait) {
 +		ret = wait_for_completion_interruptible_timeout(
-+			&event, BCM4377_DEFAULT_TIMEOUT);
++			&event, BCM4377_TIMEOUT);
 +		if (ret == 0)
 +			ret = -ETIMEDOUT;
 +		else if (ret > 0)
@@ -2090,8 +2091,8 @@ index 00000000000000..d99aa553ff0599
 +
 +	dev_dbg(&bcm4377->pdev->dev, "waiting for firmware to boot\n");
 +
-+	ret = wait_for_completion_interruptible_timeout(
-+		&bcm4377->event, BCM4377_DEFAULT_TIMEOUT);
++	ret = wait_for_completion_interruptible_timeout(&bcm4377->event,
++							BCM4377_TIMEOUT);
 +	if (ret == 0) {
 +		ret = -ETIMEDOUT;
 +		goto out_dma_free;
@@ -2124,8 +2125,8 @@ index 00000000000000..d99aa553ff0599
 +	dev_dbg(&bcm4377->pdev->dev, "starting RTI\n");
 +	iowrite32(1, bcm4377->bar0 + BCM4377_BAR0_RTI_CONTROL);
 +
-+	ret = wait_for_completion_interruptible_timeout(
-+		&bcm4377->event, BCM4377_DEFAULT_TIMEOUT);
++	ret = wait_for_completion_interruptible_timeout(&bcm4377->event,
++							BCM4377_TIMEOUT);
 +	if (ret == 0) {
 +		dev_err(&bcm4377->pdev->dev,
 +			"timed out while waiting for RTI to transition to state 1");
@@ -2154,8 +2155,8 @@ index 00000000000000..d99aa553ff0599
 +		  bcm4377->bar2 + BCM4377_BAR2_CONTEXT_ADDR_HI);
 +	iowrite32(2, bcm4377->bar0 + BCM4377_BAR0_RTI_CONTROL);
 +
-+	ret = wait_for_completion_interruptible_timeout(
-+		&bcm4377->event, BCM4377_DEFAULT_TIMEOUT);
++	ret = wait_for_completion_interruptible_timeout(&bcm4377->event,
++							BCM4377_TIMEOUT);
 +	if (ret == 0) {
 +		dev_err(&bcm4377->pdev->dev,
 +			"timed out while waiting for RTI to transition to state 2");
@@ -2212,7 +2213,7 @@ index 00000000000000..d99aa553ff0599
 +	return 0;
 +}
 +
-+static int bcm4377_parse_opt_str(struct bcm4377_data *bcm4377, const u8 *str,
++static int bcm4377_parse_otp_str(struct bcm4377_data *bcm4377, const u8 *str,
 +				 enum bcm4377_otp_params_type type)
 +{
 +	const char *p;
@@ -2293,26 +2294,25 @@ index 00000000000000..d99aa553ff0599
 +		"OTP: chip_params='%s' board_params='%s'\n", chip_params,
 +		board_params);
 +
-+	ret = bcm4377_parse_opt_str(bcm4377, chip_params,
++	ret = bcm4377_parse_otp_str(bcm4377, chip_params,
 +				    BCM4377_OTP_CHIP_PARAMS);
 +	if (ret)
 +		return ret;
 +
-+	ret = bcm4377_parse_opt_str(bcm4377, board_params,
++	ret = bcm4377_parse_otp_str(bcm4377, board_params,
 +				    BCM4377_OTP_BOARD_PARAMS);
 +	if (ret)
 +		return ret;
 +
-+	dev_dbg(&bcm4377->pdev->dev, "OTP: stepping=%s, vendor=%s\n",
-+		bcm4377->stepping, bcm4377->vendor);
-+
 +	if (!bcm4377->stepping[0] || !bcm4377->vendor[0])
 +		return -EINVAL;
 +
++	dev_dbg(&bcm4377->pdev->dev, "OTP: stepping=%s, vendor=%s\n",
++		bcm4377->stepping, bcm4377->vendor);
 +	return 0;
 +}
 +
-+static int bcm4377_read_otp(struct bcm4377_data *bcm4377)
++static int bcm4377_parse_otp(struct bcm4377_data *bcm4377)
 +{
 +	u8 otp[BCM4377_OTP_SIZE];
 +	int i;
@@ -2361,27 +2361,27 @@ index 00000000000000..d99aa553ff0599
 +	u32 ctrl;
 +
 +	ret = pci_write_config_dword(bcm4377->pdev,
-+				     BCM4377_PCIECFG_BAR0_WINDOW0,
-+				     bcm4377->hw->bar0_window0);
-+	if (ret)
-+		return ret;
-+
-+	ret = pci_write_config_dword(bcm4377->pdev,
 +				     BCM4377_PCIECFG_BAR0_WINDOW1,
 +				     bcm4377->hw->bar0_window1);
 +	if (ret)
 +		return ret;
 +
 +	ret = pci_write_config_dword(bcm4377->pdev,
-+				     BCM4377_PCIECFG_BAR0_WINDOW4,
-+				     BCM4377_PCIECFG_BAR0_WINDOW4_DEFAULT);
++				     BCM4377_PCIECFG_BAR0_WINDOW2,
++				     bcm4377->hw->bar0_window2);
 +	if (ret)
 +		return ret;
 +
-+	if (bcm4377->hw->has_bar0_window5) {
++	ret = pci_write_config_dword(
++		bcm4377->pdev, BCM4377_PCIECFG_BAR0_CORE2_WINDOW1,
++		BCM4377_PCIECFG_BAR0_CORE2_WINDOW1_DEFAULT);
++	if (ret)
++		return ret;
++
++	if (bcm4377->hw->has_bar0_core2_window2) {
 +		ret = pci_write_config_dword(bcm4377->pdev,
-+					     BCM4377_PCIECFG_BAR0_WINDOW5,
-+					     bcm4377->hw->bar0_window5);
++					     BCM4377_PCIECFG_BAR0_CORE2_WINDOW2,
++					     bcm4377->hw->bar0_core2_window2);
 +		if (ret)
 +			return ret;
 +	}
@@ -2536,7 +2536,7 @@ index 00000000000000..d99aa553ff0599
 +	if (!bcm4377->bar2)
 +		return -EBUSY;
 +
-+	ret = bcm4377_read_otp(bcm4377);
++	ret = bcm4377_parse_otp(bcm4377);
 +	if (ret) {
 +		dev_err(&pdev->dev, "Reading OTP failed with %d\n", ret);
 +		return ret;
@@ -2636,8 +2636,8 @@ index 00000000000000..d99aa553ff0599
 +	[BCM4377] = {
 +		.id = 0x4377,
 +		.otp_offset = 0x4120,
-+		.bar0_window0 = 0x1800b000,
-+		.bar0_window1 = 0x1810c000,
++		.bar0_window1 = 0x1800b000,
++		.bar0_window2 = 0x1810c000,
 +		.board_type = "apple,formosa",
 +		.disable_aspm = true,
 +		.broken_ext_scan = true,
@@ -2647,10 +2647,10 @@ index 00000000000000..d99aa553ff0599
 +	[BCM4378] = {
 +		.id = 0x4378,
 +		.otp_offset = 0x4120,
-+		.bar0_window0 = 0x18002000,
-+		.bar0_window1 = 0x1810a000,
-+		.bar0_window5 = 0x18107000,
-+		.has_bar0_window5 = true,
++		.bar0_window1 = 0x18002000,
++		.bar0_window2 = 0x1810a000,
++		.bar0_core2_window2 = 0x18107000,
++		.has_bar0_core2_window2 = true,
 +		.fixup_le_ext_adv_report_evt_type = true,
 +		.send_calibration = bcm4378_send_calibration,
 +		.send_ptb = bcm4378_send_ptb,
@@ -2659,10 +2659,10 @@ index 00000000000000..d99aa553ff0599
 +	[BCM4387] = {
 +		.id = 0x4387,
 +		.otp_offset = 0x413c,
-+		.bar0_window0 = 0x18002000,
-+		.bar0_window1 = 0x18109000,
-+		.bar0_window5 = 0x18106000,
-+		.has_bar0_window5 = true,
++		.bar0_window1 = 0x18002000,
++		.bar0_window2 = 0x18109000,
++		.bar0_core2_window2 = 0x18106000,
++		.has_bar0_core2_window2 = true,
 +		.clear_pciecfg_subsystem_ctrl_bit19 = true,
 +		.fixup_le_ext_adv_report_evt_type = true,
 +		.send_calibration = bcm4387_send_calibration,
