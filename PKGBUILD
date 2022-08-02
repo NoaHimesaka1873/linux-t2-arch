@@ -6,7 +6,7 @@
 pkgbase=linux-t2
 pkgver=5.18.14
 _srcname=linux-${pkgver}
-pkgrel=2
+pkgrel=3
 pkgdesc='Linux kernel for T2 Macs'
 _srctag=v${pkgver%.*}-${pkgver##*.}
 url="https://github.com/archlinux/linux/commits/$_srctag"
