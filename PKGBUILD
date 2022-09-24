@@ -57,6 +57,10 @@ source=(
   # T2 USB Touchpad support
   4001-Input-bcm5974-Add-support-for-the-T2-Macs.patch
 
+  # Keyboard Layout fixes
+  5001-HID-apple-fix-key-translations-where-multiple-quirks.patch
+  5002-HID-apple-enable-APPLE_ISO_TILDE_QUIRK-for-the-keybo.patch
+
   # Hack for i915 overscan issues
   7001-drm-i915-fbdev-Discard-BIOS-framebuffers-exceeding-h.patch
 
@@ -67,10 +71,6 @@ source=(
   # Broadcom BCM4377 BT device support
   # https://github.com/AsahiLinux/linux/commits/bluetooth-wip
   8002-asahilinux-hci_bcm4377-patchset.patch
-
-  # Keyboard Layout fixes
-  9001-HID-apple-fix-key-translations-where-multiple-quirks.patch
-  9002-HID-apple-enable-APPLE_ISO_TILDE_QUIRK-for-the-keybo.patch
 )
 validpgpkeys=(
   'ABAF11C65A2970B130ABE3C479BE3E4300411886'  # Linus Torvalds
@@ -279,9 +279,9 @@ sha256sums=('b8bb6019d4255f39196726f9d0f82f76179d1c3d7c6b603431ef04b38201199f'
             '398dec7d54c6122ae2263cd5a6d52353800a1a60fd85e52427c372ea9974a625'
             'd4ca5a01da5468a1d2957b8eb4a819e1b867a3bcd1cd47389d7c9ac9154b5430'
             'b1f19084e9a9843dd8c457c55a8ea8319428428657d5363d35df64fb865a4eae'
+            '19208a936b546e36e889b412461e8f990741fa65c6994306507765f3451c9e64'
+            '4db195e0bda5712e60a78266c1458037063e5debd646b08376c4700a27d4b4ef'
             '9ede98eceb69e9c93e25fdb2c567466963bdd2f81c0ecb9fb9e5107f6142ff26'
             '8662089b720681f25068ab479da00790d4e7b168131ea6867ee8db55279c18e6'
-            '20d6086c639b170c941f272a4958ad3c7fbf506d919024883f5e3e6199dcde56'
-            '7e800fe3ca2805cc7f79f081ddc3baaba3805e94ed06ddba3f6e342eb216941b'
-            'f8f9fe683b5e36f01bdafa4f4253200e2df8a804f3ccd66eb2e1ada0f85165d3')
+            '20d6086c639b170c941f272a4958ad3c7fbf506d919024883f5e3e6199dcde56')
 # vim:set ts=8 sts=2 sw=2 et:
