@@ -1,0 +1,48 @@
+# adapted from https://github.com/t2linux/T2-Ubuntu-Kernel/blob/Mainline/.github/workflows/kernel-update.yml
+---
+name: Cron job to update kernel
+
+on:
+  schedule:
+    - cron: '0 */8 * * *'
+  workflow_dispatch:
+
+jobs:
+  Mainline:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: 'Checkout Repo'
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: update.sh
+        run: |
+          cat << EOF > entrypoint.sh
+          cd /build
+          useradd builduser -m
+          passwd -d builduser
+          pacman -Syu --noconfirm --needed sudo pacman-contrib
+          chown -R builduser:builduser ./
+          sudo -u builduser ./update.sh
+          EOF
+
+          if docker run -t -v $PWD:/build archlinux /bin/bash /build/entrypoint.sh; then
+            echo "publish=no" >> $GITHUB_ENV
+            exit 0
+          else
+            echo "publish=yes" >> $GITHUB_ENV
+            grep pkgver= PKGBUILD | cut -d= -f2- >> $GITHUB_ENV
+            grep pkgrel= PKGBUILD | cut -d= -f2- >> $GITHUB_ENV
+            grep pkgbase= PKGBUILD | cut -d= -f2- >> $GITHUB_ENV
+          fi
+      - name: Create PR
+        if: env.publish == 'yes'
+        uses: peter-evans/create-pull-request@v4
+        env:
+          commit-message: ${{env.pkgbase}} v${{env.pkgver}}-${{env.pkgrel}}
+          branch: create-pull-request/v${{env.pkgver}}-${{env.pkgrel}}
+          delete-branch: true
+          title: v${{env.pkgver}}-${{env.pkgrel}} Automatic update
