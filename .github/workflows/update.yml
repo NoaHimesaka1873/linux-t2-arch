@@ -1,6 +1,8 @@
 name: Cron job to update kernel
 
 on:
+  push:
+  
   schedule:
     - cron: '0 */8 * * *'
   workflow_dispatch:
