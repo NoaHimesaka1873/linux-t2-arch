@@ -31,15 +31,18 @@ jobs:
 
           if docker run -t -v $PWD:/build archlinux /bin/bash /build/entrypoint.sh; then
             echo "publish=no" >> $GITHUB_ENV
+            echo no publish
             exit 0
           else
             echo "publish=yes" >> $GITHUB_ENV
             grep pkgver= PKGBUILD | cut -d= -f2- >> $GITHUB_ENV
             grep pkgrel= PKGBUILD | cut -d= -f2- >> $GITHUB_ENV
             grep pkgbase= PKGBUILD | cut -d= -f2- >> $GITHUB_ENV
+            echo publish
           fi
+          echo done
       - name: Create PR
-        if: env.publish == 'yes'
+        if: ${{env.publish}} == 'yes'
         uses: peter-evans/create-pull-request@v4
         env:
           commit-message: ${{env.pkgbase}} v${{env.pkgver}}-${{env.pkgrel}}
