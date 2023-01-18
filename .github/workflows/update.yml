@@ -20,8 +20,12 @@ jobs:
 
       - name: update.sh
         run: |
+          ls -l
+          id
           cat << EOF > entrypoint.sh
           cd /build
+          ls -l
+          id
           useradd builduser -m
           passwd -d builduser
           pacman -Syu --noconfirm --needed sudo pacman-contrib
