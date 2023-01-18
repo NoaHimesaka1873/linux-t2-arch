@@ -38,6 +38,7 @@ jobs:
             grep pkgrel= PKGBUILD >> $GITHUB_ENV
             grep pkgbase= PKGBUILD >> $GITHUB_ENV
           fi
+          chown -R $USER:$USER $PWD
       - name: Create PR
         if: ${{env.publish}} == 'yes'
         uses: peter-evans/create-pull-request@v4
