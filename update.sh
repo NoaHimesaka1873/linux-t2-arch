@@ -10,7 +10,7 @@ ARCH_VER=$(curl -s https://archlinux.org/packages/core/x86_64/linux/ | \
 VER=$(echo $ARCH_VER | rev | cut -d. -f2- | rev)
 OLD_VER=$(grep pkgver= PKGBUILD | cut -d= -f2-)
 
-if [ $OLD_VER == $VER]; then
+if [ $OLD_VER == $VER ]; then
 	echo "Up to date ($VER)."
 	exit 1
 fi
