@@ -30,7 +30,7 @@ jobs:
           useradd builduser -m
           passwd -d builduser
           pacman -Syu --noconfirm --needed sudo pacman-contrib git
-          chown builduser:builduser * .
+          chown builduser:builduser -R .
           sudo -u builduser ./update.sh
           EOF
 
@@ -43,7 +43,7 @@ jobs:
             grep pkgrel= PKGBUILD >> $GITHUB_ENV
             grep pkgbase= PKGBUILD >> $GITHUB_ENV
           fi
-          sudo chown -R runner:docker .
+          sudo chown runner:docker -R .
       - name: Create PR
         if: ${{env.publish}} == 'yes'
         uses: peter-evans/create-pull-request@v4
