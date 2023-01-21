@@ -30,7 +30,7 @@ jobs:
           useradd builduser -m
           passwd -d builduser
           pacman -Syu --noconfirm --needed sudo pacman-contrib git
-          chmod o+w . PKGBUILD
+          chmod o+w . PKGBUILD config
           sudo -u builduser ./update.sh
           EOF
 
