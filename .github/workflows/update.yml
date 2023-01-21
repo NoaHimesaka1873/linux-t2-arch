@@ -27,12 +27,11 @@ jobs:
           rm entrypoint.sh
           ls -l
           id
-          #useradd builduser -m
-          #passwd -d builduser
+          useradd builduser -m
+          passwd -d builduser
           pacman -Syu --noconfirm --needed sudo pacman-contrib git
-          #chown builduser:builduser -R .
-          #sudo -u builduser ./update.sh
-          ./update.sh
+          chmod o+w . PKGBUILD
+          sudo -u builduser ./update.sh
           EOF
 
           if docker run -t -v $PWD:/build archlinux /bin/bash /build/entrypoint.sh; then
