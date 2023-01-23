@@ -25,3 +25,5 @@ sed -i s/pkgrel=./pkgrel=1/ PKGBUILD
 sed -i s/pkgver=.*/pkgver=$VER/ PKGBUILD
 
 updpkgsums
+
+touch do_pr
