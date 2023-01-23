@@ -20,13 +20,9 @@ jobs:
 
       - name: update.sh
         run: |
-          ls -l
-          id
           cat << EOF > entrypoint.sh
           cd /build
           rm entrypoint.sh
-          ls -l
-          id
           useradd builduser -m
           passwd -d builduser
           pacman -Syu --noconfirm --needed sudo pacman-contrib git
@@ -39,6 +35,9 @@ jobs:
             exit 0
           else
             echo "publish=yes" >> $GITHUB_ENV
+            grep pkgver= PKGBUILD
+            grep pkgrel= PKGBUILD
+            grep pkgbase= PKGBUILD
             grep pkgver= PKGBUILD >> $GITHUB_ENV
             grep pkgrel= PKGBUILD >> $GITHUB_ENV
             grep pkgbase= PKGBUILD >> $GITHUB_ENV
