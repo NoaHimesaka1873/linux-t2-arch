@@ -43,12 +43,15 @@ jobs:
             grep pkgrel= PKGBUILD >> $GITHUB_ENV
             grep pkgbase= PKGBUILD >> $GITHUB_ENV
           fi
-          #sudo chown runner:docker -R .
       - name: Create PR
         if: ${{env.publish}} == 'yes'
         uses: peter-evans/create-pull-request@v4
-        env:
-          commit-message: ${{env.pkgbase}} v${{env.pkgver}}-${{env.pkgrel}}
-          branch: create-pull-request/v${{env.pkgver}}-${{env.pkgrel}}
+        with:
+          commit-message: ${{ env.pkgbase }} v${{ env.pkgver }}-${{ env.pkgrel }}
+          branch: auto-update/v${{ env.pkgver }}-${{ env.pkgrel }}
           delete-branch: true
           title: v${{env.pkgver}}-${{env.pkgrel}} Automatic update
+      - name: Build
+        if: ${{env.publish}} == 'yes'
+        run: |
+          gh workflow run BuildKernelPackage.yml --ref auto-update/v${{env.pkgver}}-${{env.pkgrel}}
