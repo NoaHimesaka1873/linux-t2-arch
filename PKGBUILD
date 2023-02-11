@@ -3,9 +3,9 @@
 #               Additionally, MrARM and Ronald Tschalär wrote apple-bce and
 #               apple-ibridge drivers, respectively.
 
-T2_PATCH_HASH=8d2b89297be62e077e08253df2327bddb685d154
+T2_PATCH_HASH=2baa75151ac05ba3144b9f96234d4b09d34830db
 pkgbase=linux-t2
-pkgver=6.1.10
+pkgver=6.1.11
 _srcname=linux-${pkgver}
 pkgrel=1
 pkgdesc='Linux kernel for T2 Macs'
@@ -211,7 +211,7 @@ for _p in "${pkgname[@]}"; do
   }"
 done
 
-sha256sums=('d2dbc640ea3b41cbdfdb4049b2a95b259ff340cb9022613309068b823b82efcf'
+sha256sums=('78b5a63313a003fc25bdcf1f7a1ca49f667efec6d7e79beef3f49ad67a7c8c5e'
             '2851b2b8475f1afae7d4f82b58cf7563adf99e39ebe2c1ffce2dd002e2f91b39'
             'SKIP')
 # vim:set ts=8 sts=2 sw=2 et:
