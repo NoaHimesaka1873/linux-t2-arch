@@ -5,7 +5,7 @@
 
 T2_PATCH_HASH=2baa75151ac05ba3144b9f96234d4b09d34830db
 pkgbase=linux-t2
-pkgver=6.1.11
+pkgver=6.1.12
 _srcname=linux-${pkgver}
 pkgrel=1
 pkgdesc='Linux kernel for T2 Macs'
@@ -211,7 +211,7 @@ for _p in "${pkgname[@]}"; do
   }"
 done
 
-sha256sums=('78b5a63313a003fc25bdcf1f7a1ca49f667efec6d7e79beef3f49ad67a7c8c5e'
-            '2851b2b8475f1afae7d4f82b58cf7563adf99e39ebe2c1ffce2dd002e2f91b39'
+sha256sums=('56137bd0901d8ac5570308729acfc341355fdc445f0b5bcaeb5d15b7d557e794'
+            '81a9379fd2eac51bb2dc69d83737d7fbdd41fcaca5af4873e3666d3c706760d1'
             'SKIP')
 # vim:set ts=8 sts=2 sw=2 et:
