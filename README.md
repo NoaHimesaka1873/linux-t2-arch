@@ -1,4 +1,4 @@
-linux-t2
+Linux Kernel for T2 Macs
 ========
 
 Arch Linux package for Linux kernel with bleeding edge T2 Mac support.
