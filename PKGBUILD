@@ -63,7 +63,7 @@ prepare() {
   cd $_srcname
 
   echo "Setting version..."
-  echo "-Watanare-T2" > localversion.10-codename
+  echo "-T2" > localversion.10-codename
   echo "-$pkgrel" > localversion.20-pkgrel
   echo "${pkgbase#linux}" > localversion.30-pkgname
   make defconfig
