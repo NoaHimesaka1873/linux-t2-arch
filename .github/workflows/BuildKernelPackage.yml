@@ -14,7 +14,7 @@ jobs:
         sudo rm -rf /opt/ghc
         BUILDUSER=renakoamaori
         BUILDGROUP=quintet
-        HOSTNAME=There-s-No-Freaking-Way-I-ll-Be-Your-Lover-Unless
+        HOSTNAME=Arch
         cat << EOF > entrypoint.sh
         cd /build
         groupadd -r $BUILDGROUP
@@ -55,12 +55,10 @@ jobs:
            ${{ github.workspace }}/*.zip
            ${{ github.workspace }}/*.pkg.tar.*
          tag_name: v${{ steps.create_tag.outputs.tag }}
-         name: ${{ steps.create_tag.outputs.tag }} - Release Watanare
+         name: ${{ steps.create_tag.outputs.tag }} - Release
          draft: ${{ contains(github.event.head_commit.message, '[draft]') }}
          prerelease: ${{ contains(github.event.head_commit.message, '[prerel]') }}
          body: |
-           This release features Renako Amaori from There's No Freaking Way I'll Be Your Lover! Unless..., celebrating announcement of anime adaptation!
-           Every major release will feature new anime/manga and minor releases will have different characters!
            Install packages with `sudo pacman -U <file>`, you can use urls or file paths.
       env:
          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
