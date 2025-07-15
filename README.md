@@ -1,13 +1,12 @@
-linux-t2 - Under New Management!
+Linux for T2 Macs
 ========
 
 Arch Linux package for Linux kernel with bleeding edge T2 Mac support.
-Now under new management, with 100% more manga and weebness!
 
 To build yourself:
 
 ```sh
-git clone https://github.com/NoaHimesaka1873/linux-t2-arch
+git clone https://github.com/ocean-mars/linux-t2-arch
 cd linux-t2-arch
 makepkg -si
 ```
