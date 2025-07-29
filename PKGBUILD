@@ -1,12 +1,12 @@
-# Maintainer: Noa Himesaka
+# Maintainer: Noa Himesaka, Ocean_Mars
 # Previous Maintainer: Redecorating
 # Contributors: There are many, see `grep -h "From:" *.patch|sort|uniq -c`.
 #               Additionally, MrARM and Ronald Tschalär wrote apple-bce and
 #               apple-ibridge drivers, respectively.
 
 pkgbase="linux-t2"
-_pkgver=6.15.7
-pkgver=${_pkgver}
+_pkgver=6.15.8
+pkgver=6.15.8
 _srcname=linux-${_pkgver}
 pkgrel=1
 archrel=1
@@ -37,7 +37,7 @@ conflicts=('apple-gmux-t2-dkms-git')
 replaces=('apple-gmux-t2-dkms-git')
 options=('!strip')
 _srcname="linux-${_pkgver}-arch${archrel}"
-T2_PATCH_HASH=c0db79a25bc37dbd0c27636914b3903016a2fc39
+T2_PATCH_HASH=fc8d986fe066d52654d9690acd2b9b673be57c2a
 source=(
   https://github.com/archlinux/linux/archive/refs/tags/v${_pkgver}-arch${archrel}.tar.gz
   config  # the main kernel config file
@@ -63,7 +63,7 @@ prepare() {
   cd $_srcname
 
   echo "Setting version..."
-  echo "-Watanare-T2" > localversion.10-codename
+  echo "-T2" > localversion.10-codename
   echo "-$pkgrel" > localversion.20-pkgrel
   echo "${pkgbase#linux}" > localversion.30-pkgname
   make defconfig
@@ -251,7 +251,7 @@ for _p in "${pkgname[@]}"; do
   }"
 done
 
-sha256sums=('7ad2ea26e2393b340bd5e917b9648e165e58a38d7b98949a232286e89db27799'
-            'c6c12ee73e386142074ce76cc5409552815a7d9812a1d4bbd2d686fc9e785539'
+sha256sums=('27860206ddfa89ec0cf6b1f3ba0788bf690838b26490e79303d4cb6ae033cb08'
+            'e73c5746d8f569f8c24538ffa7bc3ebc40224b806b157a0559e9f7bae61ef4e4'
             'SKIP')
 # vim:set ts=8 sts=2 sw=2 et:
