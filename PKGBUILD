@@ -1,4 +1,4 @@
-# Maintainer: Noa Himesaka, Ocean_Mars
+# Maintainer: Noa Himesaka, Ocean Mars
 # Previous Maintainer: Redecorating
 # Contributors: There are many, see `grep -h "From:" *.patch|sort|uniq -c`.
 #               Additionally, MrARM and Ronald Tschalär wrote apple-bce and
