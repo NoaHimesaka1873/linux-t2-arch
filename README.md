@@ -1,5 +1,4 @@
-Arch Linux Kernel for T2 Macs
-========
+### `Arch Linux Kernel for T2 Macs`
 [![Build Kernel Package](https://github.com/ocean-mars/linux-t2-arch/actions/workflows/BuildKernelPackage.yml/badge.svg?branch=main)](https://github.com/ocean-mars/linux-t2-arch/actions/workflows/BuildKernelPackage.yml) 
 
 Arch Linux package for Linux kernel with bleeding edge T2 Mac support.
