@@ -10,11 +10,6 @@ ARCH_VER=$(curl -s https://archlinux.org/packages/core/x86_64/linux/ | \
 VER=$(echo $ARCH_VER | rev | cut -d. -f2- | rev)
 OLD_VER=$(grep pkgver= PKGBUILD | cut -d= -f2-)
 
-if [ $OLD_VER == $VER ]; then
-	echo "Up to date ($VER)."
-	exit 0
-fi
-
 T2_PATCH_HASH=$(git ls-remote https://github.com/t2linux/linux-t2-patches.git refs/heads/main | cut -d$'\t' -f1)
 
 curl -s https://gitlab.archlinux.org/archlinux/packaging/packages/linux/-/raw/main/PKGBUILD > PKGBUILD.orig
