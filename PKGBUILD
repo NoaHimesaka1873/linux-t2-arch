@@ -28,6 +28,7 @@ makedepends=(
 
   # htmldocs
   graphviz
+  python-yaml
   imagemagick
   python-sphinx
   texlive-latexextra
