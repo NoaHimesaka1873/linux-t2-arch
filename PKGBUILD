@@ -8,7 +8,7 @@ pkgbase="linux-t2"
 _pkgver=6.17.1
 pkgver=6.17.1
 _srcname=linux-${_pkgver}
-pkgrel=1
+pkgrel=2
 archrel=1
 pkgdesc='Linux kernel for T2 Macs'
 _srctag=v${_pkgver%.*}-${_pkgver##*.}
@@ -252,6 +252,6 @@ for _p in "${pkgname[@]}"; do
 done
 
 sha256sums=('a2f6042568cffa4a531f436ae849d17290b46583aef79403d00cfd8086333976'
-            '6b337a9d3cfdc00005589a80b8d36fa500f6a92ed21565a3aceec48d7202a7da'
+            '57786a01f3cfaeb696f79bf3b19996f7f787df3df8c6fbf6a9654aced518ec93'
             'SKIP')
 # vim:set ts=8 sts=2 sw=2 et:

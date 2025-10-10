@@ -17,8 +17,8 @@ fi
 
 T2_PATCH_HASH=$(git ls-remote https://github.com/t2linux/linux-t2-patches.git refs/heads/main | cut -d$'\t' -f1)
 
-curl -s https://raw.githubusercontent.com/archlinux/svntogit-packages/packages/linux/repos/core-x86_64/PKGBUILD > PKGBUILD.orig
-curl -s https://raw.githubusercontent.com/archlinux/svntogit-packages/packages/linux/repos/core-x86_64/config > config
+curl -s https://gitlab.archlinux.org/archlinux/packaging/packages/linux/-/raw/main/PKGBUILD > PKGBUILD.orig
+curl -s https://gitlab.archlinux.org/archlinux/packaging/packages/linux/-/raw/main/config > config
 
 sed -i s/T2_PATCH_HASH=.*/T2_PATCH_HASH=$T2_PATCH_HASH/ PKGBUILD
 sed -i s/pkgrel=./pkgrel=1/ PKGBUILD
