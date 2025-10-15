@@ -41,7 +41,7 @@ jobs:
           fi
       - name: Create PR
         if: ${{env.publish == 'yes'}}
-        uses: peter-evans/create-pull-request@v4
+        uses: peter-evans/create-pull-request@v7
         with:
           commit-message: ${{ env.pkgbase }} v${{ env.pkgver }}-${{ env.pkgrel }}
           branch: auto-update/v${{ env.pkgver }}-${{ env.pkgrel }}
@@ -89,7 +89,7 @@ jobs:
           fi
       - name: Create PR
         if: ${{env.publish == 'yes'}}
-        uses: peter-evans/create-pull-request@v4
+        uses: peter-evans/create-pull-request@v7
         with:
           commit-message: ${{ env.pkgbase }} v${{ env.pkgver }}-${{ env.pkgrel }}
           branch: auto-update/v${{ env.pkgver }}-${{ env.pkgrel }}
