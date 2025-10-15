@@ -11,10 +11,58 @@ jobs:
     steps:
 
       - name: 'Checkout Repo'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
         with:
           persist-credentials: false
           fetch-depth: 0
+
+      - name: update.sh
+        run: |
+          cat << EOF > entrypoint.sh
+          cd /build
+          rm entrypoint.sh
+          useradd builduser -m
+          passwd -d builduser
+          pacman -Syu --noconfirm --needed sudo pacman-contrib git
+          chmod o+w . PKGBUILD config
+          sudo -u builduser ./update.sh
+          EOF
+
+          docker run -t -v $PWD:/build archlinux /bin/bash /build/entrypoint.sh
+          
+          if test -e do_pr; then
+            rm do_pr
+            echo "publish=yes" >> $GITHUB_ENV
+            grep pkgver= PKGBUILD >> $GITHUB_ENV
+            grep pkgrel= PKGBUILD >> $GITHUB_ENV
+            grep pkgbase= PKGBUILD >> $GITHUB_ENV
+          else
+            echo "publish=no" >> $GITHUB_ENV
+          fi
+      - name: Create PR
+        if: ${{env.publish == 'yes'}}
+        uses: peter-evans/create-pull-request@v4
+        with:
+          commit-message: ${{ env.pkgbase }} v${{ env.pkgver }}-${{ env.pkgrel }}
+          branch: auto-update/v${{ env.pkgver }}-${{ env.pkgrel }}
+          delete-branch: true
+          title: v${{env.pkgver}}-${{env.pkgrel}} Automatic update
+      - name: Build
+        if: ${{env.publish == 'yes'}}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run BuildKernelPackage.yml --ref auto-update/v${{env.pkgver}}-${{env.pkgrel}}
+  LTS:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: 'Checkout Repo'
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+          ref: 6.12
 
       - name: update.sh
         run: |
