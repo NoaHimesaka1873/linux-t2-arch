@@ -37,7 +37,7 @@ conflicts=('apple-gmux-t2-dkms-git')
 replaces=('apple-gmux-t2-dkms-git')
 options=('!strip')
 _srcname="linux-${_pkgver}-arch${archrel}"
-T2_PATCH_HASH=699c8fdf6e5d0c3bbd3487960df42881d4e8ffd9
+T2_PATCH_HASH=6cd46296f1420bceb3606dcc2c20ef8583fbe481
 source=(
   https://github.com/archlinux/linux/archive/refs/tags/v${_pkgver}-arch${archrel}.tar.gz
   config  # the main kernel config file
@@ -252,6 +252,6 @@ for _p in "${pkgname[@]}"; do
 done
 
 sha256sums=('fe62e5ade6dd090c4ffe879ce1dc9ea24901be1349fb47e79df329797eba659d'
-            '2ff20dad1b55dac1a880e589a74b2345ba80493939f000edeae168be397fea41'
+            '7f5793bfae1b8f02b5fb77b383e4b1cac82013efac1195ac317b9c44e19b7f1b'
             'SKIP')
 # vim:set ts=8 sts=2 sw=2 et:
