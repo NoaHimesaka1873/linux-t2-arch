@@ -252,6 +252,6 @@ for _p in "${pkgname[@]}"; do
 done
 
 sha256sums=('5b4f7e1da785e8e1a3793ef3039e8656ab428192249adf2a5c39585737ad6677'
-            '53876f5a6cc1efc1cbfa671517db86177c02a4ddeafc8ae8fbbec5e1aeec66b6'
+            '51aaadd58c905ab2f3dab7f2e2b49ecdb284abe797439f712ac3f77c918c87b5'
             'SKIP')
 # vim:set ts=8 sts=2 sw=2 et:
