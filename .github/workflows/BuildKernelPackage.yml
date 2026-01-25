@@ -86,4 +86,4 @@ jobs:
         scp -i ~/.ssh/id_ed25519 *.pkg.tar.zst $SSH_USER@$SSH_HOST:$REMOTE_DIR/
 
         # Update Repository
-        ssh -i ~/.ssh/id_ed25519 $SSH_USER@$SSH_HOST "cd $REMOTE_DIR && repo-add $REPO_NAME.db.tar.gz *.pkg.tar.zst"
+        ssh -i ~/.ssh/id_ed25519 $SSH_USER@$SSH_HOST "cd $REMOTE_DIR && repo-add $REPO_NAME.db.tar.zst *.pkg.tar.zst"
