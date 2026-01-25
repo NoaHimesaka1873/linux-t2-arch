@@ -47,12 +47,6 @@ jobs:
           branch: auto-update/v${{ env.pkgver }}-${{ env.pkgrel }}
           delete-branch: true
           title: v${{env.pkgver}}-${{env.pkgrel}} Automatic update
-      - name: Build
-        if: ${{env.publish == 'yes'}}
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh workflow run BuildKernelPackage.yml --ref auto-update/v${{env.pkgver}}-${{env.pkgrel}}
   LTS:
     runs-on: ubuntu-latest
     steps:
@@ -95,9 +89,3 @@ jobs:
           branch: auto-update/v${{ env.pkgver }}-${{ env.pkgrel }}
           delete-branch: true
           title: v${{env.pkgver}}-${{env.pkgrel}} Automatic update
-      - name: Build
-        if: ${{env.publish == 'yes'}}
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh workflow run BuildKernelPackage.yml --ref auto-update/v${{env.pkgver}}-${{env.pkgrel}}
