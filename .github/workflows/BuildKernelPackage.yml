@@ -85,6 +85,7 @@ jobs:
         REMOTE_DIR: ${{ secrets.REMOTE_DIR }}
         REPO_NAME: ${{ secrets.REPO_NAME }}
       run: |
+        source PKGBUILD
         # Setup SSH
         mkdir -p ~/.ssh
         echo "$SSH_KEY" > ~/.ssh/id_ed25519
@@ -92,7 +93,8 @@ jobs:
         ssh-keyscan -H $SSH_HOST >> ~/.ssh/known_hosts
 
         # Upload Packages
-        scp -i ~/.ssh/id_ed25519 *.pkg.tar.zst $SSH_USER@$SSH_HOST:$REMOTE_DIR/
+        PKG_FILES="${pkgbase}*-${pkgver}-${pkgrel}-x86_64.pkg.tar.zst"
+        scp -i ~/.ssh/id_ed25519 $PKG_FILES $SSH_USER@$SSH_HOST:$REMOTE_DIR/
 
         # Update Repository
-        ssh -i ~/.ssh/id_ed25519 $SSH_USER@$SSH_HOST "cd $REMOTE_DIR && repo-add $REPO_NAME.db.tar.zst *.pkg.tar.zst"
+        ssh -i ~/.ssh/id_ed25519 $SSH_USER@$SSH_HOST "cd $REMOTE_DIR && repo-add $REPO_NAME.db.tar.zst $PKG_FILES"
