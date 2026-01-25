@@ -66,3 +66,24 @@ jobs:
          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
+
+    - name: Upload and Update Repo
+      if: ${{ !contains(github.event.head_commit.message, '[no rel]') && !contains(github.event.head_commit.message, '[no build]') && github.event_name != 'pull_request' }}
+      env:
+        SSH_HOST: ${{ secrets.SSH_HOST }}
+        SSH_USER: ${{ secrets.SSH_USER }}
+        SSH_KEY: ${{ secrets.SSH_KEY }}
+        REMOTE_DIR: ${{ secrets.REMOTE_DIR }}
+        REPO_NAME: ${{ secrets.REPO_NAME }}
+      run: |
+        # Setup SSH
+        mkdir -p ~/.ssh
+        echo "$SSH_KEY" > ~/.ssh/id_ed25519
+        chmod 600 ~/.ssh/id_ed25519
+        ssh-keyscan -H $SSH_HOST >> ~/.ssh/known_hosts
+
+        # Upload Packages
+        scp -i ~/.ssh/id_ed25519 *.pkg.tar.zst $SSH_USER@$SSH_HOST:$REMOTE_DIR/
+
+        # Update Repository
+        ssh -i ~/.ssh/id_ed25519 $SSH_USER@$SSH_HOST "cd $REMOTE_DIR && repo-add $REPO_NAME.db.tar.gz *.pkg.tar.zst"
