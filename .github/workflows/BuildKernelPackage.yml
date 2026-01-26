@@ -29,6 +29,11 @@ jobs:
         EOF
 
         docker run -h $HOSTNAME -t -v $PWD:/build archlinux /bin/bash /build/entrypoint.sh
+
+    - name: Restore Workspace Permissions
+      if: ${{ !contains(github.event.head_commit.message, '[no build]') }}
+      run: |
+        sudo chown -R $USER:$USER .
     
     - name: Print sha512sums
       if: ${{ !contains(github.event.head_commit.message, '[no build]') }}
@@ -66,8 +71,6 @@ jobs:
            (Yes, we know we used YuruYuri in 5.15, we are reusing them since they were from Linux 5 and only used for one release.) 
       env:
          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
 
     - name: Tailscale
       if: ${{ !contains(github.event.head_commit.message, '[no rel]') && !contains(github.event.head_commit.message, '[no build]') && github.event_name != 'pull_request' }}
