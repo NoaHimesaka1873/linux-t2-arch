@@ -28,6 +28,11 @@ jobs:
         EOF
 
         docker run -h $HOSTNAME -t -v $PWD:/build archlinux /bin/bash /build/entrypoint.sh
+
+    - name: Restore Workspace Permissions
+      if: ${{ !contains(github.event.head_commit.message, '[no build]') }}
+      run: |
+        sudo chown -R $USER:$USER .
     
     - name: Print sha512sums
       if: ${{ !contains(github.event.head_commit.message, '[no build]') }}
@@ -64,9 +69,6 @@ jobs:
            Install packages with `sudo pacman -U <file>`, you can use urls or file paths.
       env:
          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
-
 
     - name: Tailscale
       if: ${{ !contains(github.event.head_commit.message, '[no rel]') && !contains(github.event.head_commit.message, '[no build]') && github.event_name != 'pull_request' }}
