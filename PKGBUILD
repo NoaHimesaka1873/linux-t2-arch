@@ -5,8 +5,8 @@
 #               apple-ibridge drivers, respectively.
 
 pkgbase="linux-t2"
-_pkgver=6.18.8
-pkgver=6.18.8
+_pkgver=6.18.9
+pkgver=6.18.9
 _srcname=linux-${_pkgver}
 pkgrel=1
 archrel=1
@@ -251,7 +251,7 @@ for _p in "${pkgname[@]}"; do
   }"
 done
 
-sha256sums=('9cfd0f54dd4af57a1cfcb1aa9385d12e3621f24904317f957ed672a598ab9559'
+sha256sums=('9bb1d7b00c175369c86ff183dceeea6ddb4004cc10d5bb48ce4cfa9d4f9bf55c'
             '9fed188f89847418aaf6416b64457a30bee34dcd0fa42a84dbd0f4dfca063402'
             'SKIP')
 # vim:set ts=8 sts=2 sw=2 et:
