@@ -37,7 +37,7 @@ conflicts=('apple-gmux-t2-dkms-git')
 replaces=('apple-gmux-t2-dkms-git')
 options=('!strip')
 _srcname="linux-${_pkgver}-arch${archrel}"
-T2_PATCH_HASH=dccf4fb03651e2e37a5eb8d072dd461b19559346
+T2_PATCH_HASH=5051ebba61fe8765ba452f46db9b944f33f07a86
 source=(
   https://github.com/archlinux/linux/archive/refs/tags/v${_pkgver}-arch${archrel}.tar.gz
   config  # the main kernel config file
