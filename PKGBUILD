@@ -43,7 +43,7 @@ source=(
   config  # the main kernel config file
 
   # t2linux Patches
-  patches::git+https://github.com/t2linux/linux-t2-patches#commit=547fa06ff16ae131f2ae1083b17946384ddeb755
+  patches::git+https://github.com/t2linux/linux-t2-patches
 )
 validpgpkeys=(
   ABAF11C65A2970B130ABE3C479BE3E4300411886  # Linus Torvalds
@@ -253,5 +253,5 @@ done
 
 sha256sums=('4df7897bb281459012a27e1a647d3d73f364caaf597d21a97ba41608a9e05305'
             '112501e973db8bebf1d5ba9ac2ab58a97a3535b474fc93f2ae1e4a64488594ee'
-            '89725eb19fe8e193f0cfcbdc5ad829b5f73aea887750e384f6d5129182a5394b')
+            'SKIP')
 # vim:set ts=8 sts=2 sw=2 et:
