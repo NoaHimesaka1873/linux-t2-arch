@@ -5,7 +5,7 @@
 #               apple-ibridge drivers, respectively.
 
 pkgbase="linux-lts-t2"
-pkgver=6.12.75
+pkgver=6.18.22
 _srcname=linux-${pkgver}
 pkgrel=1
 pkgdesc='Linux kernel for T2 Macs'
@@ -43,7 +43,7 @@ source=(
   0003-skip-simpledrm-if-nvidia-drm.modeset\=1-is.patch
 
   # t2linux Patches
-  patches::git+https://github.com/t2linux/linux-t2-patches#branch=6.12
+  patches::git+https://github.com/t2linux/linux-t2-patches#branch=6.18
 )
 validpgpkeys=(
   ABAF11C65A2970B130ABE3C479BE3E4300411886  # Linus Torvalds
@@ -253,7 +253,7 @@ for _p in "${pkgname[@]}"; do
   }"
 done
 
-sha256sums=('06ee7927556ff1aa8810c4826501b0fdb169ebdc180644b882cf7c143ac1c177'
+sha256sums=('a23c92faf3657385c2c6b5f4edd8f81b808907ebe603fa30699eae224da55f59'
             'SKIP'
             'b364eae3a55fc2d3fd3029866b8f90430bc0c307cfa22a3e190ac1c13fcf8aa2'
             '3cf389ced2b40e6457421cb27892bf126b73032fbf1de895ecc37b13d981a17c'
