@@ -56,7 +56,7 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 0
-          ref: 6.12
+          ref: 6.18
 
       - name: update.sh
         run: |
