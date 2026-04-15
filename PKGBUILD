@@ -39,8 +39,8 @@ source=(
   https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/${_srcname}.tar.{xz,sign}
   config  # the main kernel config file
   0001-ZEN-Add-sysctl-and-CONFIG-to-disallow-unprivileged-C.patch
-  0002-Default-to-maximum-amount-of-ASLR-bits.patch
-  0003-skip-simpledrm-if-nvidia-drm.modeset\=1-is.patch
+  0002-drm-amdgpu-avoid-memory-allocation-in-the-critical-code-path-v3.patch
+  0003-drm-amdgpu-use-GFP_ATOMIC-instead-of-NOWAIT-in-the-critical-path.patch
 
   # t2linux Patches
   patches::git+https://github.com/t2linux/linux-t2-patches#branch=6.18
@@ -256,8 +256,8 @@ done
 sha256sums=('a23c92faf3657385c2c6b5f4edd8f81b808907ebe603fa30699eae224da55f59'
             'SKIP'
             'b364eae3a55fc2d3fd3029866b8f90430bc0c307cfa22a3e190ac1c13fcf8aa2'
-            '3cf389ced2b40e6457421cb27892bf126b73032fbf1de895ecc37b13d981a17c'
-            '423b2c6fbc8d6df79997550bef1b1e4f6f402b668007d150013623a83a12b49e'
-            '596f8e0aef1df72a84685e8f2b8a9dde7e33b513de555fae6069ba652cbd00c1'
+            'e5bda61fa4405571a0267cd8812329bb8a432a37efb50459461628d371849906'
+            'c31b8c0ace123f5c1a0012a1254272eea9ac9cdd0d3e5d538ca6b11830dd01b0'
+            '0f482368b62c3cece941e2d3ba497bf322db59315df5c2f72500fc1318e4768e'
             'SKIP')
 # vim:set ts=8 sts=2 sw=2 et:
