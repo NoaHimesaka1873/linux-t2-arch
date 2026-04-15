@@ -5,7 +5,7 @@ set -euo pipefail
 
 ARCH_VER=$(curl -s https://archlinux.org/packages/core/x86_64/linux-lts/ | \
         grep "Arch Linux - linux-lts" | \
-        tr " " $'\n' | grep 6.12 | cut -d- -f1)
+        tr " " $'\n' | grep 6.18 | cut -d- -f1)
 
 VER=$ARCH_VER
 OLD_VER=$(grep pkgver= PKGBUILD | cut -d= -f2-)
@@ -15,7 +15,7 @@ if [ $OLD_VER == $VER ]; then
 	exit 0
 fi
 
-T2_PATCH_HASH=$(git ls-remote https://github.com/t2linux/linux-t2-patches.git refs/heads/6.12 | cut -d$'\t' -f1)
+T2_PATCH_HASH=$(git ls-remote https://github.com/t2linux/linux-t2-patches.git refs/heads/6.18 | cut -d$'\t' -f1)
 
 curl -s https://gitlab.archlinux.org/archlinux/packaging/packages/linux-lts/-/raw/main/PKGBUILD > PKGBUILD.orig
 curl -s https://gitlab.archlinux.org/archlinux/packaging/packages/linux-lts/-/raw/main/config > config
