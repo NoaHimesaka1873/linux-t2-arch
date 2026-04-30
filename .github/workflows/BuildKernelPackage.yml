@@ -74,9 +74,11 @@ jobs:
 
     - name: Tailscale
       if: ${{ !contains(github.event.head_commit.message, '[no rel]') && !contains(github.event.head_commit.message, '[no build]') && github.event_name != 'pull_request' }}
-      uses: tailscale/github-action@v3
+      uses: tailscale/github-action@v4
       with:
-        authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
+        oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+        audience: ${{ secrets.TS_AUDIENCE }}
+        tags: tag:ci
         version: latest
 
     - name: Upload and Update Repo
@@ -101,3 +103,6 @@ jobs:
 
         # Update Repository
         ssh -i ~/.ssh/id_ed25519 $SSH_USER@$SSH_HOST "cd $REMOTE_DIR && repo-add $REPO_NAME.db.tar.zst $PKG_FILES"
+
+permissions:
+  id-token: write # This is required for the Tailscale action to request a JWT from GitHub
