@@ -3,6 +3,9 @@ on: [push, pull_request, workflow_dispatch]
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
     steps:
     - name: Checkout Repo
       uses: actions/checkout@v3
@@ -101,7 +104,3 @@ jobs:
 
         # Update Repository
         ssh -i ~/.ssh/id_ed25519 $SSH_USER@$SSH_HOST "cd $REMOTE_DIR && repo-add $REPO_NAME.db.tar.zst $PKG_FILES"
-
-permissions:
-  id-token: write # This is required for the Tailscale action to request a JWT from GitHub
-  contents: write
