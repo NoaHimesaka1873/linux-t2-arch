@@ -26,7 +26,7 @@ jobs:
         pacman -Syu --noconfirm --needed sudo base-devel git python-yaml
         printf '$BUILDUSER ALL=(ALL) ALL\\n' | tee -a /etc/sudoers
         chown -R $BUILDUSER:$BUILDGROUP ./
-        sudo -u $BUILDUSER gpg --keyserver keyserver.ubuntu.com --recv-keys 38DBBDC86092693E
+        sudo -u $BUILDUSER gpg --keyserver keyserver.ubuntu.com --recv-keys 38DBBDC86092693E 83BC8889351B5DEBBB68416EB8AC08600F108CDF
         sudo -u $BUILDUSER bash -c 'export MAKEFLAGS=j\$(nproc) && makepkg -s --noconfirm'
         EOF
 

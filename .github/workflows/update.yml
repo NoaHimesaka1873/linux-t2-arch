@@ -24,7 +24,7 @@ jobs:
           useradd builduser -m
           passwd -d builduser
           pacman -Syu --noconfirm --needed sudo pacman-contrib git
-          chmod o+w . PKGBUILD config
+          chmod o+w . PKGBUILD config.x86_64
           sudo -u builduser ./update.sh
           EOF
 
@@ -66,7 +66,7 @@ jobs:
           useradd builduser -m
           passwd -d builduser
           pacman -Syu --noconfirm --needed sudo pacman-contrib git
-          chmod o+w . PKGBUILD config
+          chmod o+w . PKGBUILD config.x86_64
           sudo -u builduser ./update.sh
           EOF
 

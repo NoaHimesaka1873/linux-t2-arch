@@ -7,7 +7,7 @@ ARCH_VER=$(curl -s https://archlinux.org/packages/core/x86_64/linux/ | \
 	grep "Arch Linux - linux" | \
 	tr " " $'\n' | grep arch | cut -d- -f1)
 
-VER=$(echo "$ARCH_VER" | rev | cut -d. -f2- | rev)
+VER=$ARCH_VER
 OLD_VER=$(grep "^pkgver=" PKGBUILD | cut -d= -f2-)
 OLD_PKGREL=$(grep "^pkgrel=" PKGBUILD | cut -d= -f2-)
 
@@ -29,13 +29,12 @@ if [ "$OLD_VER" == "$VER" ]; then
 	fi
 fi
 
-curl -s https://gitlab.archlinux.org/archlinux/packaging/packages/linux/-/raw/main/PKGBUILD > PKGBUILD.orig
-curl -s https://gitlab.archlinux.org/archlinux/packaging/packages/linux/-/raw/main/config.x86_64 > config
+curl -sf https://gitlab.archlinux.org/archlinux/packaging/packages/linux/-/raw/main/PKGBUILD > PKGBUILD.orig
+curl -sf https://gitlab.archlinux.org/archlinux/packaging/packages/linux/-/raw/main/config.x86_64 > config.x86_64
 
 sed -i "s/^T2_PATCH_HASH=.*/T2_PATCH_HASH=$T2_PATCH_HASH/" PKGBUILD
 sed -i "s/^pkgrel=.*/pkgrel=1/" PKGBUILD
 sed -i "s/^pkgver=.*/pkgver=$VER/" PKGBUILD
-sed -i "s/^_pkgver=.*/_pkgver=$VER/" PKGBUILD
 
 updpkgsums
 

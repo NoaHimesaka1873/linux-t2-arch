@@ -3,3 +3,5 @@ src/
 pkg/
 patches/
 PKGBUILD.orig
+*.patch.zst
+*.patch.zst.sig

@@ -4,60 +4,80 @@
 #               Additionally, MrARM and Ronald Tschalär wrote apple-bce and
 #               apple-ibridge drivers, respectively.
 
-pkgbase="linux-t2"
-_pkgver=7.1.8
-pkgver=7.1.8
-_srcname=linux-${_pkgver}
-pkgrel=2
-archrel=1
-pkgdesc='Linux kernel for T2 Macs'
-_srctag=v${_pkgver%.*}-${_pkgver##*.}
-url="https://github.com/archlinux/linux/commits/$_srctag"
-arch=(x86_64)
-license=(GPL2)
+pkgbase=linux-t2
+pkgver=7.1.8.arch1
+pkgrel=1
+pkgdesc='Linux for T2 Macs'
+url='https://github.com/archlinux/linux'
+arch=(
+  x86_64
+)
+license=(GPL-2.0-only)
 makedepends=(
   bc
+  binutils
   cpio
   gettext
   git
+  glibc
   libelf
+  libgcc
+  openssl
   pahole
   perl
+  python
+  rust
+  rust-bindgen
+  rust-src
   tar
+  xxhash
   xz
+  zlib
+  zstd
 
   # htmldocs
   graphviz
   imagemagick
   python-sphinx
+  python-yaml
   texlive-latexextra
-  xmlto
 )
-conflicts=('apple-gmux-t2-dkms-git')
-replaces=('apple-gmux-t2-dkms-git')
-options=('!strip')
-_srcname="linux-${_pkgver}-arch${archrel}"
+options=(
+  !debug
+  !strip
+)
+_srcname=linux-${pkgver%.*}
+_srctag=v${pkgver%.*}-${pkgver##*.}
 T2_PATCH_HASH=01a53a9d6a99ff86486b5bf42be816272165349a
 source=(
-  https://github.com/archlinux/linux/archive/refs/tags/v${_pkgver}-arch${archrel}.tar.gz
-  config  # the main kernel config file
+  https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/${_srcname}.tar.{xz,sign}
+  $url/releases/download/$_srctag/linux-$_srctag.patch.zst{,.sig}
 
   # t2linux Patches
-  patches::git+https://github.com/t2linux/linux-t2-patches
+  patches::git+https://github.com/t2linux/linux-t2-patches#commit=${T2_PATCH_HASH}
 )
+source_x86_64=(config.x86_64)
 validpgpkeys=(
   ABAF11C65A2970B130ABE3C479BE3E4300411886  # Linus Torvalds
   647F28654894E3BD457199BE38DBBDC86092693E  # Greg Kroah-Hartman
-  A2FF3A36AAA56654109064AB19802F8B0D70FC30  # Jan Alexander Steffens (heftig)
-  C7E7849466FE2358343588377258734B41C31549  # David Runge <dvzrv@archlinux.org>
+  83BC8889351B5DEBBB68416EB8AC08600F108CDF  # Jan Alexander Steffens (heftig)
 )
+sha256sums=('ff01dcb449279d5b4cfccdb01fee639cf5ff1803f1749a77844dd33915422c49'
+            'SKIP'
+            '351cfb04db323bf5dd55ae8ce626650d20ba61441d202cadd8e198c6b9ef8f36'
+            'SKIP'
+            'a679cef07aca4229a0f05a307afcf8c40582d63a06fab0894cd97171d7e49b31')
+sha256sums_x86_64=('9b853f428724ae2edffd330745f47f9bcb6650b10872297686cf38f035f85134')
+b2sums=('84b59e5572d91f5ea1bb603aa7691851bd9549e1bf18a6bec8e27eb8a6e2de2e33da2ad3e3aad501c793e9756e70245a16545e76b65a44ee52b33ccf5c3dd8e7'
+        'SKIP'
+        '308952977c15ac3ad976ff1d99d0d186814d4b03e1c8512fc3a4c0ac1ecce3f74be8f3900a7fd286492d4f930bedc089674bf713a278fa80c35413e0e6339f97'
+        'SKIP'
+        '191796370752382b0dc1c2f59b512d0b29b10dfff69700e0480060a2361d316c064a475c35149c737d7b920b80dc6fdfe5f897276f3f9690c03484f86323b713')
+b2sums_x86_64=('b10d80423aa3eb65e2046bf5b1998f9a7bdbc97494c6881881f50ffcdb5fe2e242782f59dbb6402cd77ce64b988dbf295fd9fa54f20180c76fbe88b82e1dbc9d')
+
+# https://www.kernel.org/pub/linux/kernel/v7.x/sha256sums.asc
 
 export KBUILD_BUILD_TIMESTAMP="$(date -Ru${SOURCE_DATE_EPOCH:+d @$SOURCE_DATE_EPOCH})"
-
-_make() {
-  test -s version
-  make KERNELRELEASE="$(<version)" "$@"
-}
 
 prepare() {
   cd $_srcname
@@ -66,9 +86,6 @@ prepare() {
   echo "-Watanare-T2" > localversion.10-codename
   echo "-$pkgrel" > localversion.20-pkgrel
   echo "${pkgbase#linux}" > localversion.30-pkgname
-  make defconfig
-  make -s kernelrelease > version
-  make mrproper
 
   t2linux_patches=$(ls $srcdir/patches | grep -e \.patch$)
   mv $srcdir/patches/*.patch $srcdir/
@@ -76,23 +93,31 @@ prepare() {
   for src in "${source[@]}" $t2linux_patches; do
     src="${src%%::*}"
     src="${src##*/}"
+    src="${src%.zst}"
     [[ $src = *.patch ]] || continue
     echo "Applying patch $src..."
     patch -Np1 < "../$src"
   done
 
   echo "Setting config..."
-  cp ../config .config
+  cp ../config.$CARCH .config
   cat $srcdir/patches/extra_config >> .config
-  _make olddefconfig
-  diff -u ../config .config || :
+  make olddefconfig
+  diff -u ../config.$CARCH .config || :
 
+  make -s kernelrelease > version
   echo "Prepared $pkgbase version $(<version)"
 }
 
 build() {
   cd $_srcname
-  _make htmldocs all
+
+  make htmldocs SPHINXOPTS=-QT &
+  local pid_docs=$!
+
+  make all
+  make -C tools/bpf/bpftool vmlinux.h feature-clang-bpf-co-re=1
+  wait $pid_docs
 }
 
 _package() {
@@ -103,16 +128,23 @@ _package() {
     kmod
   )
   optdepends=(
-    'wireless-regdb: to set the correct wireless channels of your country'
+    "$pkgbase-headers: headers and scripts for building modules"
     'linux-firmware: firmware images needed for some devices'
+    'scx-scheds: to use sched-ext schedulers'
+    'wireless-regdb: to set the correct wireless channels of your country'
   )
   provides=(
     KSMBD-MODULE
+    NTSYNC-MODULE
     VIRTUALBOX-GUEST-MODULES
     WIREGUARD-MODULE
     linux
   )
+  conflicts=(
+    apple-gmux-t2-dkms-git
+  )
   replaces=(
+    apple-gmux-t2-dkms-git
     virtualbox-guest-modules-arch
     wireguard-arch
   )
@@ -123,13 +155,13 @@ _package() {
   echo "Installing boot image..."
   # systemd expects to find the kernel here to allow hibernation
   # https://github.com/systemd/systemd/commit/edda44605f06a41fb86b7ab8128dcf99161d2344
-  install -Dm644 "$(_make -s image_name)" "$modulesdir/vmlinuz"
+  install -Dm644 "$(make -s image_name)" "$modulesdir/vmlinuz"
 
   # Used by mkinitcpio to name the kernel
   echo "$pkgbase" | install -Dm644 /dev/stdin "$modulesdir/pkgbase"
 
   echo "Installing modules..."
-  _make INSTALL_MOD_PATH="$pkgdir/usr" INSTALL_MOD_STRIP=1 \
+  ZSTD_CLEVEL=19 make INSTALL_MOD_PATH="$pkgdir/usr" INSTALL_MOD_STRIP=1 \
     DEPMOD=/doesnt/exist modules_install  # Suppress depmod
 
   # remove build link
@@ -138,29 +170,51 @@ _package() {
 
 _package-headers() {
   pkgdesc="Headers and scripts for building modules for the $pkgdesc kernel"
-  depends=(pahole)
-  provides=(linux-headers)
+  depends=(
+    binutils
+    glibc
+    libelf
+    libgcc
+    openssl
+    pahole
+    xxhash
+    zlib
+    zstd
+  )
+  provides=(
+    LINUX-HEADERS
+    linux-headers
+  )
 
   cd $_srcname
   local builddir="$pkgdir/usr/lib/modules/$(<version)/build"
 
+  local karch
+  case $CARCH in
+    x86_64) karch=x86 ;;
+    *) echo "Unknown CARCH $CARCH"; exit 1 ;;
+  esac
+
   echo "Installing build files..."
   install -Dt "$builddir" -m644 .config Makefile Module.symvers System.map \
-    localversion.* version vmlinux
+    localversion.* version vmlinux tools/bpf/bpftool/vmlinux.h
   install -Dt "$builddir/kernel" -m644 kernel/Makefile
-  install -Dt "$builddir/arch/x86" -m644 arch/x86/Makefile
+  install -Dt "$builddir/arch/$karch" -m644 arch/$karch/Makefile
   cp -t "$builddir" -a scripts
+  ln -srt "$builddir" "$builddir/scripts/gdb/vmlinux-gdb.py"
 
-  # required when STACK_VALIDATION is enabled
-  install -Dt "$builddir/tools/objtool" tools/objtool/objtool
+  if [[ $(scripts/config -s CONFIG_HAVE_STACK_VALIDATION) = y ]]; then
+    install -Dt "$builddir/tools/objtool" tools/objtool/objtool
+  fi
 
-  # required when DEBUG_INFO_BTF_MODULES is enabled
-  install -Dt "$builddir/tools/bpf/resolve_btfids" tools/bpf/resolve_btfids/resolve_btfids
+  if [[ $(scripts/config -s CONFIG_DEBUG_INFO_BTF_MODULES) = y ]]; then
+    install -Dt "$builddir/tools/bpf/resolve_btfids" tools/bpf/resolve_btfids/resolve_btfids
+  fi
 
   echo "Installing headers..."
   cp -t "$builddir" -a include
-  cp -t "$builddir/arch/x86" -a arch/x86/include
-  install -Dt "$builddir/arch/x86/kernel" -m644 arch/x86/kernel/asm-offsets.s
+  cp -t "$builddir/arch/$karch" -a arch/$karch/include
+  install -Dt "$builddir/arch/$karch/kernel" -m644 arch/$karch/kernel/asm-offsets.s
 
   install -Dt "$builddir/drivers/md" -m644 drivers/md/*.h
   install -Dt "$builddir/net/mac80211" -m644 net/mac80211/*.h
@@ -179,10 +233,20 @@ _package-headers() {
   echo "Installing KConfig files..."
   find . -name 'Kconfig*' -exec install -Dm644 {} "$builddir/{}" \;
 
+  if [[ $(scripts/config -s CONFIG_RUST) = y ]]; then
+    echo "Installing Rust files..."
+    install -Dt "$builddir/rust" -m644 rust/*.rmeta
+    install -Dt "$builddir/rust" rust/*.so
+  fi
+
+  echo "Installing unstripped VDSO..."
+  make INSTALL_MOD_PATH="$pkgdir/usr" vdso_install \
+    link=  # Suppress build-id symlinks
+
   echo "Removing unneeded architectures..."
   local arch
   for arch in "$builddir"/arch/*/; do
-    [[ $arch = */x86/ ]] && continue
+    [[ $arch = */$karch/ ]] && continue
     echo "Removing $(basename "$arch")"
     rm -r "$arch"
   done
@@ -232,7 +296,10 @@ _package-docs() {
     dst="${src#Documentation/}"
     dst="$builddir/Documentation/${dst#output/}"
     install -Dm644 "$src" "$dst"
-  done < <(find Documentation -name '.*' -prune -o ! -type d -print0)
+  done < <(
+    find Documentation \( -name '.*' -o -name __pycache__ \) -prune \
+      -o \! -type d -print0
+  )
 
   echo "Adding symlink..."
   mkdir -p "$pkgdir/usr/share/doc"
@@ -251,7 +318,4 @@ for _p in "${pkgname[@]}"; do
   }"
 done
 
-sha256sums=('41d1dd6620c334aca9396eec754edfa7b9c52404c64f87f4e6630a87c518ccf0'
-            '9b853f428724ae2edffd330745f47f9bcb6650b10872297686cf38f035f85134'
-            'SKIP')
 # vim:set ts=8 sts=2 sw=2 et:
