@@ -8,7 +8,7 @@ pkgbase="linux-t2"
 _pkgver=7.1.8
 pkgver=7.1.8
 _srcname=linux-${_pkgver}
-pkgrel=1
+pkgrel=2
 archrel=1
 pkgdesc='Linux kernel for T2 Macs'
 _srctag=v${_pkgver%.*}-${_pkgver##*.}
@@ -37,7 +37,7 @@ conflicts=('apple-gmux-t2-dkms-git')
 replaces=('apple-gmux-t2-dkms-git')
 options=('!strip')
 _srcname="linux-${_pkgver}-arch${archrel}"
-T2_PATCH_HASH=b71434b20483d907801d4258c1e8de0a932ee4d9
+T2_PATCH_HASH=01a53a9d6a99ff86486b5bf42be816272165349a
 source=(
   https://github.com/archlinux/linux/archive/refs/tags/v${_pkgver}-arch${archrel}.tar.gz
   config  # the main kernel config file
