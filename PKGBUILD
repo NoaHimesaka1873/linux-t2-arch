@@ -5,8 +5,8 @@
 #               apple-ibridge drivers, respectively.
 
 pkgbase=linux-t2
-pkgver=7.1.8.arch1
-pkgrel=4
+pkgver=7.1.11.arch1
+pkgrel=1
 pkgdesc='Linux for T2 Macs'
 url='https://github.com/archlinux/linux'
 arch=(
@@ -62,18 +62,18 @@ validpgpkeys=(
   647F28654894E3BD457199BE38DBBDC86092693E  # Greg Kroah-Hartman
   83BC8889351B5DEBBB68416EB8AC08600F108CDF  # Jan Alexander Steffens (heftig)
 )
-sha256sums=('ff01dcb449279d5b4cfccdb01fee639cf5ff1803f1749a77844dd33915422c49'
+sha256sums=('3029540d8f2ec75bee5cbdb7c2a0daa60bffa1d105c82ecb99b53432f6351afc'
             'SKIP'
-            '351cfb04db323bf5dd55ae8ce626650d20ba61441d202cadd8e198c6b9ef8f36'
+            '65ac652435227139d1d05ee1f1f6d1383a2ef80f325006440229ef225423a3c6'
             'SKIP'
             'dc1f121bc66053f863bc9e5bc734467c16d3a7c5b70d7062d189867a825f3c25')
-sha256sums_x86_64=('9b853f428724ae2edffd330745f47f9bcb6650b10872297686cf38f035f85134')
-b2sums=('84b59e5572d91f5ea1bb603aa7691851bd9549e1bf18a6bec8e27eb8a6e2de2e33da2ad3e3aad501c793e9756e70245a16545e76b65a44ee52b33ccf5c3dd8e7'
+sha256sums_x86_64=('9f6e1be50d2ebb69a23b14799ccf23462c80e29f284ce3b205186921c5c3bf3d')
+b2sums=('389da9454f5400639802909ef04069ae5a9d5c3a938feff04d770fb3b47cf152f0cde2ea5ce57addb3e8c1ec3bd3ec3a996c4b65d5d205595db96e61a15db50d'
         'SKIP'
-        '308952977c15ac3ad976ff1d99d0d186814d4b03e1c8512fc3a4c0ac1ecce3f74be8f3900a7fd286492d4f930bedc089674bf713a278fa80c35413e0e6339f97'
+        '061dfec9ad030980e980c6108e4b60dfca8daaf796987bb976bfac0b79f3a84fcb90cfb394a647e904fb5236b3d4837d090e9025c59eddfb57d9a673a38f40d8'
         'SKIP'
         'ed6fe64ce366e91c082377bcd00b5d9b9624f8ffe00a7aa2895b48fc10efbc29cc1b2ae00d825c57ddfece16b591b55bb4ab5a8d12efb7785c5db02e7778e629')
-b2sums_x86_64=('b10d80423aa3eb65e2046bf5b1998f9a7bdbc97494c6881881f50ffcdb5fe2e242782f59dbb6402cd77ce64b988dbf295fd9fa54f20180c76fbe88b82e1dbc9d')
+b2sums_x86_64=('829f887f9867135dc8977d536ef31f9b1c42418f05ef5552443955e23cf0d60dad2b5d9ac138670f976e4ab71e982fbf25dbb3be654fcfcd54ca22ef0fb72ed3')
 
 # https://www.kernel.org/pub/linux/kernel/v7.x/sha256sums.asc
 
