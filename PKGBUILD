@@ -5,7 +5,7 @@
 #               apple-ibridge drivers, respectively.
 
 pkgbase=linux-t2
-pkgver=7.1.11.arch1
+pkgver=7.2.2.arch1
 pkgrel=1
 pkgdesc='Linux for T2 Macs'
 url='https://github.com/archlinux/linux'
@@ -62,15 +62,15 @@ validpgpkeys=(
   647F28654894E3BD457199BE38DBBDC86092693E  # Greg Kroah-Hartman
   83BC8889351B5DEBBB68416EB8AC08600F108CDF  # Jan Alexander Steffens (heftig)
 )
-sha256sums=('3029540d8f2ec75bee5cbdb7c2a0daa60bffa1d105c82ecb99b53432f6351afc'
+sha256sums=('7d0e7ce14f98c43efe880cffbf354a59be45928fdf7170d7333c374ae91c0d83'
             'SKIP'
-            '65ac652435227139d1d05ee1f1f6d1383a2ef80f325006440229ef225423a3c6'
+            'e8f3e197bd64985922150873c4af09301088a7437217f519243ce74ba6a691f4'
             'SKIP'
             'dc1f121bc66053f863bc9e5bc734467c16d3a7c5b70d7062d189867a825f3c25')
 sha256sums_x86_64=('9f6e1be50d2ebb69a23b14799ccf23462c80e29f284ce3b205186921c5c3bf3d')
-b2sums=('389da9454f5400639802909ef04069ae5a9d5c3a938feff04d770fb3b47cf152f0cde2ea5ce57addb3e8c1ec3bd3ec3a996c4b65d5d205595db96e61a15db50d'
+b2sums=('7d3904933ddca054bc085d34c2941d0ed74280c3691716b55369197a0f40dad8d116abaca22fcea71476bd52e9396d80d066d3e859bc945dfdb9e305baff59ab'
         'SKIP'
-        '061dfec9ad030980e980c6108e4b60dfca8daaf796987bb976bfac0b79f3a84fcb90cfb394a647e904fb5236b3d4837d090e9025c59eddfb57d9a673a38f40d8'
+        '3953137079a786967230b6f5f2b4ccaa7cb5a2b09ef533ea5b9b8ca83fa4d8795a2fd8430bb5fc1dd280396571685e3fa06fe6aaa4fc64ad9484008457218713'
         'SKIP'
         'ed6fe64ce366e91c082377bcd00b5d9b9624f8ffe00a7aa2895b48fc10efbc29cc1b2ae00d825c57ddfece16b591b55bb4ab5a8d12efb7785c5db02e7778e629')
 b2sums_x86_64=('829f887f9867135dc8977d536ef31f9b1c42418f05ef5552443955e23cf0d60dad2b5d9ac138670f976e4ab71e982fbf25dbb3be654fcfcd54ca22ef0fb72ed3')
