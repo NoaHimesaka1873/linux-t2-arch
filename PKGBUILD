@@ -6,7 +6,7 @@
 
 pkgbase=linux-t2
 pkgver=7.2.2.arch1
-pkgrel=2
+pkgrel=3
 pkgdesc='Linux for T2 Macs'
 url='https://github.com/archlinux/linux'
 arch=(
@@ -97,6 +97,19 @@ prepare() {
     [[ $src = *.patch ]] || continue
     echo "Applying patch $src..."
     patch -Np1 < "../$src"
+  done
+
+  echo "Applying local BCM4364/MacBookPro16,1 Bluetooth patches..."
+  local extra_patch
+  for extra_patch in \
+    9010-Bluetooth-hci_bcm-track-usable-reset-resources.patch \
+    9011-Bluetooth-hci_bcm-fix-malformed-legacy-advertising-types.patch \
+    9012-Bluetooth-hci_bcm-find-Apple-power-methods-under-BLTH.patch \
+    9013-Bluetooth-limit-discovery-on-BCM4364-with-active-ACL.patch \
+    9014-wifi-brcmfmac-apply-Apple-BCM4364-coexistence-parameters.patch
+  do
+    echo "Applying patch $extra_patch..."
+    patch -Np1 < "$startdir/$extra_patch"
   done
 
   echo "Setting config..."
