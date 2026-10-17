@@ -6,7 +6,7 @@
 
 pkgbase=linux-t2
 pkgver=7.2.10.arch1
-pkgrel=1
+pkgrel=2
 pkgdesc='Linux for T2 Macs'
 url='https://github.com/archlinux/linux'
 arch=(
@@ -48,7 +48,7 @@ options=(
 )
 _srcname=linux-${pkgver%.*}
 _srctag=v${pkgver%.*}-${pkgver##*.}
-T2_PATCH_HASH=458f0550f78de33e9be21df636c7f1a61488e092
+T2_PATCH_HASH=e16720782ee30fac38486b6c58d32443899c136a
 source=(
   https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/${_srcname}.tar.{xz,sign}
   $url/releases/download/$_srctag/linux-$_srctag.patch.zst{,.sig}
@@ -66,13 +66,13 @@ sha256sums=('2feaa70453e91f541be6a5c9078d8168e081af45a3d9718054850538cff2ebf3'
             'SKIP'
             '8ffe49bd444a895726935c0882cdf6cdae78ddc5181e5e807ae130a754055d68'
             'SKIP'
-            '89eb516d5c3906511a871bd6acf30d58fbf99a66ac72190afb36977269c41bb0')
+            'd9fa9aa5045079877d6bb226ee718c09bea424f6a91a48358430e406efe1d1ac')
 sha256sums_x86_64=('f16adcb6dc1dc241ea90e23ca920697d00e4618df1b72d914ff15bc55ab4051f')
 b2sums=('f6fa406d0764f0ab9ed199747420e45c422f1cb1a74e5eff1d488b8ad8aa33660440dab2bf15303638e70a9798574ac49550e0fa03bc7550284028548c34cdce'
         'SKIP'
         'ba40e6b37149194c8b953ba904666643a1471331d260ec910fa5038d76453bebfa1c0f5acd12607253f590469a5ce27248f93a308ebb94899902ec7b8ed596f1'
         'SKIP'
-        '4158162ce3e6c598db9bc43a1cceeec36266c5c6c05587d55c23e334175c3194d47d441e435a3fcf81a423b9c70c4af5214553788553b83c1e1b5dcea6a0b828')
+        'd6e2e1fb810c2fdec46479e06a7db905106bb8b2ca72de815b377c6755ef07af6a85bfe8d5caf77cfd79153ed741debf379f63464a18b88f0234f7b551f7f784')
 b2sums_x86_64=('58babcf7bed396598de1a7c010292aebb56b2c726f9d8d28344049646d5ed814489db0e22a4e62718e5e6dcc94c581858c17b235e88dc3263fa78934d2a84104')
 
 # https://www.kernel.org/pub/linux/kernel/v7.x/sha256sums.asc
