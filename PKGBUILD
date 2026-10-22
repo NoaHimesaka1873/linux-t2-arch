@@ -6,7 +6,7 @@
 
 pkgbase=linux-lts-t2
 pkgver=6.18.57
-pkgrel=4
+pkgrel=5
 pkgdesc='LTS Linux for T2 Macs'
 url="https://gitlab.archlinux.org/archlinux/packaging/packages/linux-lts"
 arch=(
@@ -47,7 +47,7 @@ options=(
 )
 _srcname=linux-$pkgver
 _srctag=v$pkgver
-T2_PATCH_HASH=1911e311376f2ca2c5282ea53dd3b086552bfab3
+T2_PATCH_HASH=4bd58ee8d301c7ee199fe8640276813d50f7357a
 source=(
   https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/${_srcname}.tar.{xz,sign}
   0001-add-sysctl-to-allow-disabling-unprivileged-CLONE_NEW.patch
@@ -67,14 +67,14 @@ sha256sums=('5bd9acdc82ec5efc3790ae840e5aaa40dfde7efff261cf6dde902dc570acf98c'
             '0bb3b4cda53db35c10e0a34defb5f52f3c91895d7b4a9f93b3f40f5401a71e02'
             '70d54dfde13e52ea1109c4222a987a29ada68feec35dca9ce4afd6f7977e8740'
             '44caa7c6a79055539f16ab118bece58934cdf93557643a50017634366c864b91'
-            '1aa33da50bcdfb93762b2be8a8edfa9a8c3362a6ed9f70be87f54df011e70057')
+            'ba3c748af473d7004811ad4baa4dc795786adc998c803599eb22e21de5e3f6a8')
 sha256sums_x86_64=('5375afdcb5d2749f1835b360561125f4d8b62617326dec493cea7d69b55254e4')
 b2sums=('d9d47914c7fb82e299ea1400f978ec5f42fefc199e44206edb2b4b4c699aca814436e90f837758a2f4d7004f0b0000bb58343a91ca1c31aad77694084c72894a'
         'SKIP'
         'f98f4a2e714f7c9e05740caaad2bf014065ec950c096df74a3dee8b2ce6549f034adf6f87a76168f513aa68eb738edbdb6fe1a3f1b3a5104201c65199b5b931e'
         '6ca246df80fa85f9c21d090f87ee31e33acb02f3c1147944750e0896ebf199bc0cf427a164dacbdd9baa26dbdbce2fabd89ebdb6a8ce5dae83fc455b27a56cc8'
         'a612d5ea58485eeaa5cce0b30074ab3188f4321c4759448780de2f3f656821356d640df433e31bd4e8f2c9719c8e275374ddea29b9504335ed0981be5ac7bf7b'
-        '3a0c1ea6172c7bd44906172d076fd85dae2c2d0aaf7c6d148beea8c35dfcb262f319ad1647fea1e0884bd89c96b4759852677916869a46941df83775f3e9a8d3')
+        '76216a12b72b1861f5a10b461805f60ab2f78c8aa3bf4ce12779b3619de43fbac08f92d65be4c2276136ca2982ac5ba66399d5fec62ab2556b2a701159aaa2c8')
 b2sums_x86_64=('794d81dc9a8210e496fa6de426cbfdb1ff69cac4d62ebc70133b9d4f4a0c1b2b23553e793eb79800c56fd11addb9e12ec6c31ecb1dd51f3b9ad133f58ded2406')
 
 # https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
