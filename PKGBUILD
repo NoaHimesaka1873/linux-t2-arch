@@ -5,7 +5,7 @@
 #               apple-ibridge drivers, respectively.
 
 pkgbase=linux-t2
-pkgver=7.2.14.arch1
+pkgver=7.2.15.arch1
 pkgrel=1
 pkgdesc='Linux for T2 Macs'
 url='https://github.com/archlinux/linux'
@@ -48,7 +48,7 @@ options=(
 )
 _srcname=linux-${pkgver%.*}
 _srctag=v${pkgver%.*}-${pkgver##*.}
-T2_PATCH_HASH=777f516f5e8768edf6f026a9268ed0e1dbe4ff22
+T2_PATCH_HASH=d10ac26ae916126485498425e5a04c46530599b1
 source=(
   https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/${_srcname}.tar.{xz,sign}
   $url/releases/download/$_srctag/linux-$_srctag.patch.zst{,.sig}
@@ -62,18 +62,18 @@ validpgpkeys=(
   647F28654894E3BD457199BE38DBBDC86092693E  # Greg Kroah-Hartman
   83BC8889351B5DEBBB68416EB8AC08600F108CDF  # Jan Alexander Steffens (heftig)
 )
-sha256sums=('bb1b871ef95a8de10b3f7b7baf0e0d754abbf620f804b6caf860f226aa97647d'
+sha256sums=('d0f6b1d7324c937ccaeb5c4ca7084bfcf71db2edb3e2d3a31f0ad83a681809ab'
             'SKIP'
-            '8048e7c6bf74e4d9195cfea2f52b47326eed35b85b6be90ab9ba1928dc0575fa'
+            '58c4f43e0c1583a37774867efe8a8d7b1201d094feb304111da161791193a790'
             'SKIP'
-            '0ebed90838c90a42996bf420ee19ac07e1dc8f3d465237e7575877eb8ef3680a')
-sha256sums_x86_64=('e8f340e4d83dd3cac6ac516a6d43919d325ec15895c8e63bb27e1db156eb0731')
-b2sums=('2214cebaf37149fce36324429aa56f7dde474cb86d87a670b596d69fcdcc0e98adacaec9460542f9629f88af93501f941a7cf7bbb4b429a9bbdee2d1461344e0'
+            'cc3bfa793f85fefe7666659252d25b7217baec6fe7e953b3d402a911d0c5017d')
+sha256sums_x86_64=('bb03d28b8af371cd47eebf18378197c57e26c951d33c872d52ae97a2690d1ec6')
+b2sums=('a1d1a6572667dfd75f7dde083a8d461db98e08bbc67cdd395e2d73a422ee487bd14392ce69b9511c386b63d9c3c02255978a33149278d6e3bace35937ceda495'
         'SKIP'
-        '0b7ff7f47957ab932cc79a1fa8ba4441ff46c5fe15874bb831f4747751334aaff32ef1b1bb54d6194de98a051bbbd23eeea2adf7686552640c8c8695a80ed817'
+        '67c3a12310872c288ee5c6681fcd3f956103da1a7cf67f97a0bc2a1c2bfea6c4d7f916250eee79088d3e5c74e2e85a6145b3a605ed7527990c95e69454a9a455'
         'SKIP'
-        '602392d6906ec42a842b44eaed86003ca03f9ff91b459e80a8e8b4c3309dec59ecaabf287d999437ff1c3be1b7bd922c80bbf467e3f6c36a73f9152d1c5e796c')
-b2sums_x86_64=('7b0b12692a377195543ca9beadd416f819aa50b98b6b1e24e54177fa52a43a732ee38a0bd81a6f3605ca78dabc894d99d8653883cafa79e18475617cf10735cc')
+        '16fb98c5393e498eb4cfe3e2bf3c5ba3d55aa02d88ded0b9d1d0bea596b339fb9ab8a194b6dbf28f3832cf299e6aafc3ed6b8881a76c6ddcb490a5e1ae71a9d1')
+b2sums_x86_64=('6948a9e708325cb54446530da2bd6ded6f0717a534893fff6acaa1a113bce42eed085f6cc5b3a7972f9a1aa4e6bc7d8484ab2bf74ae3253d444fb274a23beae1')
 
 # https://www.kernel.org/pub/linux/kernel/v7.x/sha256sums.asc
 
