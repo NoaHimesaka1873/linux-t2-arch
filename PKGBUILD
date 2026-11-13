@@ -5,7 +5,7 @@
 #               apple-ibridge drivers, respectively.
 
 pkgbase=linux-lts-t2
-pkgver=6.18.62
+pkgver=6.18.63
 pkgrel=1
 pkgdesc='LTS Linux for T2 Macs'
 url="https://gitlab.archlinux.org/archlinux/packaging/packages/linux-lts"
@@ -62,14 +62,14 @@ validpgpkeys=(
   ABAF11C65A2970B130ABE3C479BE3E4300411886  # Linus Torvalds
   647F28654894E3BD457199BE38DBBDC86092693E  # Greg Kroah-Hartman
 )
-sha256sums=('490a7aedf1b355c565d3a6c05333ccccb5da82064eca46b590448a7099d7d651'
+sha256sums=('81764a545072d160748beff4d9de2e7d95aa9f16e8261110288f067a2cc61d71'
             'SKIP'
             '0bb3b4cda53db35c10e0a34defb5f52f3c91895d7b4a9f93b3f40f5401a71e02'
             '70d54dfde13e52ea1109c4222a987a29ada68feec35dca9ce4afd6f7977e8740'
             '44caa7c6a79055539f16ab118bece58934cdf93557643a50017634366c864b91'
             'b5b1703c9ab784dc90e31d2eb7618919a0a8aa9a8f02306c08f63a25b60b9283')
 sha256sums_x86_64=('26add142e3830b18338b12fe7d311d57358aebaba7c121b2a0d0d6ece3ba946c')
-b2sums=('e5b0eef407345ad6b114f9cdcc8df965b35b4250a6a22ed6c5ca3cb4a932363961fbf6848ae35affe8447a84a970c603c82ae816cb1b5ba1e2fa19459ddad0b5'
+b2sums=('b8d7dc0e3b5877ecada68a482d8180d525f5056acb198ffc225a538173652b8e1030de06f461db58f4b60ec5f335b78a2e0704a80cb6ab341b404a1fde518e84'
         'SKIP'
         'f98f4a2e714f7c9e05740caaad2bf014065ec950c096df74a3dee8b2ce6549f034adf6f87a76168f513aa68eb738edbdb6fe1a3f1b3a5104201c65199b5b931e'
         '6ca246df80fa85f9c21d090f87ee31e33acb02f3c1147944750e0896ebf199bc0cf427a164dacbdd9baa26dbdbce2fabd89ebdb6a8ce5dae83fc455b27a56cc8'
