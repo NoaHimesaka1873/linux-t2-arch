@@ -48,6 +48,8 @@ options=(
 _srcname=linux-$pkgver
 _srctag=v$pkgver
 T2_PATCH_HASH=d72d75899f6e01104c22992abedd9ae68956cc3b
+_anime=YuruYuri
+_slogan=Trans-Rights
 source=(
   https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/${_srcname}.tar.{xz,sign}
   0001-add-sysctl-to-allow-disabling-unprivileged-CLONE_NEW.patch
@@ -85,7 +87,7 @@ prepare() {
   cd $_srcname
 
   echo "Setting version..."
-  echo "-YuruYuri-T2" > localversion.10-codename
+  echo "-${_anime}-${_slogan}-T2" > localversion.10-codename
   echo "-$pkgrel" > localversion.20-pkgrel
   echo "${pkgbase#linux}" > localversion.30-pkgname
 
