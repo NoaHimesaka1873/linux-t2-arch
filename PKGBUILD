@@ -49,6 +49,8 @@ options=(
 _srcname=linux-${pkgver%.*}
 _srctag=v${pkgver%.*}-${pkgver##*.}
 T2_PATCH_HASH=dd9b845c30b3212ac5cbd7c18d0fc0bedb13e4fb
+_anime=Watanare
+_slogan=DHH-Is-A-Fascist
 source=(
   https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/${_srcname}.tar.{xz,sign}
   $url/releases/download/$_srctag/linux-$_srctag.patch.zst{,.sig}
@@ -83,7 +85,7 @@ prepare() {
   cd $_srcname
 
   echo "Setting version..."
-  echo "-Watanare-T2" > localversion.10-codename
+  echo "-${_anime}-${_slogan}-T2" > localversion.10-codename
   echo "-$pkgrel" > localversion.20-pkgrel
   echo "${pkgbase#linux}" > localversion.30-pkgname
 
