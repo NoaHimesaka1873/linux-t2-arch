@@ -50,7 +50,7 @@ _srcname=linux-${pkgver%.*}
 _srctag=v${pkgver%.*}-${pkgver##*.}
 T2_PATCH_HASH=dd9b845c30b3212ac5cbd7c18d0fc0bedb13e4fb
 _anime=Watanare
-_slogan=DHH-Is-A-Fascist
+_slogan=Stop-Supporting-Fascists
 source=(
   https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/${_srcname}.tar.{xz,sign}
   $url/releases/download/$_srctag/linux-$_srctag.patch.zst{,.sig}
