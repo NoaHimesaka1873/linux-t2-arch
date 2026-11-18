@@ -6,7 +6,7 @@
 
 pkgbase=linux-lts-t2
 pkgver=6.18.63
-pkgrel=1
+pkgrel=2
 pkgdesc='LTS Linux for T2 Macs'
 url="https://gitlab.archlinux.org/archlinux/packaging/packages/linux-lts"
 arch=(
@@ -47,9 +47,9 @@ options=(
 )
 _srcname=linux-$pkgver
 _srctag=v$pkgver
-T2_PATCH_HASH=d72d75899f6e01104c22992abedd9ae68956cc3b
+T2_PATCH_HASH=ef17c6e432b6b71b3809d58c1caccc1ac67f6bb1
 _anime=YuruYuri
-_slogan=Trans-Rights
+_slogan=Omarchy-Is-Not-Arch
 source=(
   https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/${_srcname}.tar.{xz,sign}
   0001-add-sysctl-to-allow-disabling-unprivileged-CLONE_NEW.patch
@@ -69,14 +69,14 @@ sha256sums=('81764a545072d160748beff4d9de2e7d95aa9f16e8261110288f067a2cc61d71'
             '0bb3b4cda53db35c10e0a34defb5f52f3c91895d7b4a9f93b3f40f5401a71e02'
             '70d54dfde13e52ea1109c4222a987a29ada68feec35dca9ce4afd6f7977e8740'
             '44caa7c6a79055539f16ab118bece58934cdf93557643a50017634366c864b91'
-            'b5b1703c9ab784dc90e31d2eb7618919a0a8aa9a8f02306c08f63a25b60b9283')
+            '96b190a9923dae0aa91d113d9fc9505d88d9ac77ec2893518de4de8b32e279a7')
 sha256sums_x86_64=('26add142e3830b18338b12fe7d311d57358aebaba7c121b2a0d0d6ece3ba946c')
 b2sums=('b8d7dc0e3b5877ecada68a482d8180d525f5056acb198ffc225a538173652b8e1030de06f461db58f4b60ec5f335b78a2e0704a80cb6ab341b404a1fde518e84'
         'SKIP'
         'f98f4a2e714f7c9e05740caaad2bf014065ec950c096df74a3dee8b2ce6549f034adf6f87a76168f513aa68eb738edbdb6fe1a3f1b3a5104201c65199b5b931e'
         '6ca246df80fa85f9c21d090f87ee31e33acb02f3c1147944750e0896ebf199bc0cf427a164dacbdd9baa26dbdbce2fabd89ebdb6a8ce5dae83fc455b27a56cc8'
         'a612d5ea58485eeaa5cce0b30074ab3188f4321c4759448780de2f3f656821356d640df433e31bd4e8f2c9719c8e275374ddea29b9504335ed0981be5ac7bf7b'
-        '07bdf8fe598c211e9debc1516fdd82289d5e9623e748d44667b70a456320b01cb5a6569183211cffb9cf25bf7af52955774ea0c962a7b1b8aa9902121da88a96')
+        '949631e9981508999641cf834765b118dd33054d570b8857d2d6a6ba2b2c2a0213dd8d267d0ceaa464de74b497bdf0cb7b15c261b8489bc3847923f3f1619214')
 b2sums_x86_64=('b113db31e322955a1058041523a5b111e527168c5af1434c3c8ad523c0f6527ef5c372065bb3bce1d0dd66cdcd221cf61b1ebfd87efcbb009902fa0dbeaee6b4')
 
 # https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
