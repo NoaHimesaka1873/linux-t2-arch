@@ -5,7 +5,7 @@
 #               apple-ibridge drivers, respectively.
 
 pkgbase=linux-lts-t2
-pkgver=6.18.63
+pkgver=6.18.64
 pkgrel=1
 pkgdesc='LTS Linux for T2 Macs'
 url="https://gitlab.archlinux.org/archlinux/packaging/packages/linux-lts"
@@ -47,9 +47,9 @@ options=(
 )
 _srcname=linux-$pkgver
 _srctag=v$pkgver
-T2_PATCH_HASH=d72d75899f6e01104c22992abedd9ae68956cc3b
+T2_PATCH_HASH=927fd724ee3f98a48f42e9995572e565443fc179
 _anime=YuruYuri
-_slogan=Trans-Rights
+_slogan=Omarchy-Is-Not-Arch
 source=(
   https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/${_srcname}.tar.{xz,sign}
   0001-add-sysctl-to-allow-disabling-unprivileged-CLONE_NEW.patch
@@ -64,20 +64,20 @@ validpgpkeys=(
   ABAF11C65A2970B130ABE3C479BE3E4300411886  # Linus Torvalds
   647F28654894E3BD457199BE38DBBDC86092693E  # Greg Kroah-Hartman
 )
-sha256sums=('81764a545072d160748beff4d9de2e7d95aa9f16e8261110288f067a2cc61d71'
+sha256sums=('020d45510c539972e6f14c5c71566878d3b7ef56fb082b3e09134f2ebaade562'
             'SKIP'
             '0bb3b4cda53db35c10e0a34defb5f52f3c91895d7b4a9f93b3f40f5401a71e02'
             '70d54dfde13e52ea1109c4222a987a29ada68feec35dca9ce4afd6f7977e8740'
             '44caa7c6a79055539f16ab118bece58934cdf93557643a50017634366c864b91'
-            'b5b1703c9ab784dc90e31d2eb7618919a0a8aa9a8f02306c08f63a25b60b9283')
-sha256sums_x86_64=('26add142e3830b18338b12fe7d311d57358aebaba7c121b2a0d0d6ece3ba946c')
-b2sums=('b8d7dc0e3b5877ecada68a482d8180d525f5056acb198ffc225a538173652b8e1030de06f461db58f4b60ec5f335b78a2e0704a80cb6ab341b404a1fde518e84'
+            '3f9ce0efda9f207e90665c7fda2c3855773cfcc00f3444cb5e2bec8e5219bcc7')
+sha256sums_x86_64=('2db0c283e7eceb641b3a9b8124244902136f150416aa0d05a363d8d67545b9ad')
+b2sums=('2c9130c8a2f57384556517159efbf843771298943d52abfac7cd3bf5524b10213f0972c9cdc5cfc11028300c06e7afc4ba1a84495119316d286e4c5e0f87e652'
         'SKIP'
         'f98f4a2e714f7c9e05740caaad2bf014065ec950c096df74a3dee8b2ce6549f034adf6f87a76168f513aa68eb738edbdb6fe1a3f1b3a5104201c65199b5b931e'
         '6ca246df80fa85f9c21d090f87ee31e33acb02f3c1147944750e0896ebf199bc0cf427a164dacbdd9baa26dbdbce2fabd89ebdb6a8ce5dae83fc455b27a56cc8'
         'a612d5ea58485eeaa5cce0b30074ab3188f4321c4759448780de2f3f656821356d640df433e31bd4e8f2c9719c8e275374ddea29b9504335ed0981be5ac7bf7b'
-        '07bdf8fe598c211e9debc1516fdd82289d5e9623e748d44667b70a456320b01cb5a6569183211cffb9cf25bf7af52955774ea0c962a7b1b8aa9902121da88a96')
-b2sums_x86_64=('b113db31e322955a1058041523a5b111e527168c5af1434c3c8ad523c0f6527ef5c372065bb3bce1d0dd66cdcd221cf61b1ebfd87efcbb009902fa0dbeaee6b4')
+        'ecdaf510e60909923f4bf3450e59ad90a3335b15dbd88d0e7b682c3401c65570dbfb0c71ece742679f6e0366f00ad13780434eb67a45c5079356d9a48e84021f')
+b2sums_x86_64=('2756e2ae149395576b02cc35edaac3e416c063434d43d189a51454d4ee8e67eee453713315d9c8db4ebf67690944daaaaa2773b985d8f87015c9ae65224bab3a')
 
 # https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
 
