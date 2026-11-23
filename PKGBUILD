@@ -6,7 +6,7 @@
 
 pkgbase=linux-t2
 pkgver=7.3.5.arch1
-pkgrel=2
+pkgrel=3
 pkgdesc='Linux for T2 Macs'
 url='https://github.com/archlinux/linux'
 arch=(
@@ -48,9 +48,9 @@ options=(
 )
 _srcname=linux-${pkgver%.*}
 _srctag=v${pkgver%.*}-${pkgver##*.}
-T2_PATCH_HASH=b02a841c206f177bbb549e670e53dd5dbd90bab1
+T2_PATCH_HASH=56ef7488988b4fd7173eab73740e14794534dd61
 _anime=Watanare
-_slogan=Protect-Trans-Kids
+_slogan=No-Fascists-In-My-Kernel
 source=(
   https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/${_srcname}.tar.{xz,sign}
   $url/releases/download/$_srctag/linux-$_srctag.patch.zst{,.sig}
@@ -68,13 +68,13 @@ sha256sums=('8f293f83d54f0b7b9be56863ebc5e4ea79d73e530b4ae55c572be97ef39f0990'
             'SKIP'
             'ab8cc9a56046bfdcbe8741283cb642fcb1ab25de4ac2b66fe655dd34e3ddc3b6'
             'SKIP'
-            '9dc1664bcd7724db6595feb6578b75e85471b3d097be2841c4d6f373b733ec7c')
+            '914d933fbfb8865a9edf93115516c1b25f15d44d5ede0fcb80eaef1015cc0163')
 sha256sums_x86_64=('75366b057ddfafeb2c02a902aebdcbeb36ddcd56de74c82b1eadf4fac308555a')
 b2sums=('333bad17d6e6ae06935b08e8715cc617f59c0fdbab52dd1026a16b1125c8e693482946dc46f5b6e1f7c24a3919ddc44a8dd39f045dcb3d2da8b8001c113f13c0'
         'SKIP'
         'b4517a6cf6abb495af1df4884f66ffe79833fa8fe2cae08a00a88ee2ae508c3e68ce1f028faedf9dfcd0c8e687bbd7f9df5ed701417b9e23058f178256975f02'
         'SKIP'
-        '30066cbb52a79685a7be7e54000c3747ad6e6dd52c559fd01cac754e7ab79a9fa04290a395ffb2c4bd62023fc9bf86e6cbc4512e558df6092a9e63bc2ea374a1')
+        'a2cd453784e08db080f7d5f3298e303a5f49a11278b377633dd74d40b607976700dceebd26314acbc3447f2c504e88b0a12ea1447a600b0a513af18116573558')
 b2sums_x86_64=('9862de977018fa89882f29a794cf73acfe410d3f4ff9a0a2b9529847af48a1b847887c8c75cf14beffcc5a5199895aa17c4319c047b8129f16d3964474081943')
 
 # https://www.kernel.org/pub/linux/kernel/v7.x/sha256sums.asc
