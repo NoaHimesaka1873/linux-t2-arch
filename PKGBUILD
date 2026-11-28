@@ -6,7 +6,7 @@
 
 pkgbase=linux-t2
 pkgver=7.3.6.arch1
-pkgrel=1
+pkgrel=2
 pkgdesc='Linux for T2 Macs'
 url='https://github.com/archlinux/linux'
 arch=(
@@ -48,9 +48,9 @@ options=(
 )
 _srcname=linux-${pkgver%.*}
 _srctag=v${pkgver%.*}-${pkgver##*.}
-T2_PATCH_HASH=6f5bbfea364276b80ab1a4e2bd655b9399ea9a7f
+T2_PATCH_HASH=e401a6fd2c1ccb5e3ca4d5cdece6b4ec073fb902
 _anime=Watanare
-_slogan=No-Fashtech-In-My-Kernel
+_slogan=Trans-Women-Are-Women
 source=(
   https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/${_srcname}.tar.{xz,sign}
   $url/releases/download/$_srctag/linux-$_srctag.patch.zst{,.sig}
@@ -68,13 +68,13 @@ sha256sums=('8183d475a76a0faffa92d6cd500af421f589dfd0300a0f1060bb875e11d45723'
             'SKIP'
             'e76df8ca615ad71eb9cc214b8293202287a4efb1136098972a832d2ce72a02bf'
             'SKIP'
-            '77d1cf383bf0c48d8e3311f430b6c777180f0693d407771231c1c528a946881c')
+            '7b513d2b1c821105fa44ff32b8c7651f5fb0290a104b1b8da0dbec8be6be57e6')
 sha256sums_x86_64=('4f1c75c66623f09b80c4adcafd998377fea51ae962c26e0a30656e3edd873069')
 b2sums=('78da05b71d4fb975d759e7e9f74917531fc06b0740cdf9eab69b1d7b838d6a0cc19a087a629bb41eb4ae77f9ca745cd309e4d90911e4b74347016a059b3fac02'
         'SKIP'
         '5ca895061b555f0561546525f1ab213fe27c1ba7e6a0bbe0f4c6bc7b135db707bd8162d47d107bf2ec862a09b34f970a3b151c6267540d3b20366e102e3421e7'
         'SKIP'
-        '33b78afd6a5d447e099afaffa5b587859adb2c2e14adc51bd83853bb617024791e99a9263e83e7a3ea01405e0ff900269040a6c0e993760615012606e5d0592f')
+        '0c2dfc406a4ecbab960c7852a5751ecd8180dff13e173736ae20b633055420ad747a52ce23851d3292b82d33dbc8bb4fbebeb17e3d26e388f531949a721a3585')
 b2sums_x86_64=('717e22962ab421d31fed9e50f9c82e58dc749a76823fb540b8e4830b467aa8d38ace5121105d70d6c6ef317551bcf7b796cdc15e6c896df9d62225c320b77262')
 
 # https://www.kernel.org/pub/linux/kernel/v7.x/sha256sums.asc
